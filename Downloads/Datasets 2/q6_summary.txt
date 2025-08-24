@@ -1,0 +1,8 @@
+Q6 — Trends & Visualizations (Summary)
+Method: per-team/season metrics normalized to per-82 using season baseline; league averages by season.
+Trend C (4-in-6 per-82) slope: -0.180 (neg ↓).
+Trend D (avg rest days) slope: 0.013 (pos ↑).
+Trend E (homestand len) slope: 0.051; road-trip len slope: 0.050 (pos ↑).
+Trend F (two-game series per-82) slope: 0.465 (jump ~2020; elevated).
+Trend A (B2B per-82) slope: -0.499 (down vs mid-2010s).
+Trend B (miles per-82) slope: -448.200 (lower post-2019).
