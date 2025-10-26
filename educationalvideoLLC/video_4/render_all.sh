@@ -27,3 +27,4 @@ manim -pqh 04_outro.py Outro
 echo ""
 echo "All scenes rendered! Check the media/videos/video_4 folder"
 
+

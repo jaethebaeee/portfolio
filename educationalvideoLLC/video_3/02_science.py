@@ -16,18 +16,8 @@ class Science(Scene):
         ).set_stroke(width=0)
         self.add(bg)
 
-        # --- Title ---
-        title = Text(
-            "The Dopamine Connection",
-            font_size=40,
-            color=ACCENT_COLOR_PRIMARY,
-            weight=BOLD
-        )
-        title.to_edge(UP, buff=0.8)
-        
+        # No title text - go straight to visual
         narrator.narrate("Here's what's really happening: dopamine.", duration=2.5)
-        self.play(Write(title), run_time=1.5)
-        self.wait(0.5)
 
         # --- Create timeline ---
         timeline = Line(LEFT * 4, RIGHT * 4, color=GRAY, stroke_width=2)
@@ -154,7 +144,6 @@ class Science(Scene):
                 social_icon, work_icon, instant_reward, delayed_reward,
                 question_mark, conflict_arrow
             )),
-            FadeOut(title),
             run_time=1
         )
         

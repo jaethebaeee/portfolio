@@ -239,3 +239,4 @@ class Tips(Scene):
             run_time=1.5
         )
 
+

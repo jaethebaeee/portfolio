@@ -94,7 +94,8 @@ class Intro(Scene):
             Dot(radius=0.08, color=ACCENT_COLOR_WARNING)
             for _ in range(10)
         ])
-        overflow_dots.arrange_randomly()
+        # Arrange in a scattered pattern
+        overflow_dots.arrange_in_grid(3, 4, buff=0.2)
         overflow_dots.move_to(brain_outline.get_center() + UP * 0.5)
         
         narrator.narrate("If nothing was forgotten, your brain would overflow.", duration=2.5)

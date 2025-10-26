@@ -16,18 +16,8 @@ class Tips(Scene):
         ).set_stroke(width=0)
         self.add(bg)
 
-        # --- Title ---
-        title = Text(
-            "5 Ways to Beat Procrastination",
-            font_size=38,
-            color=ACCENT_COLOR_PRIMARY,
-            weight=BOLD
-        )
-        title.to_edge(UP, buff=0.6)
-        
+        # No title text - go straight to visuals
         narrator.narrate("Here are five science-backed strategies to overcome procrastination.", duration=3)
-        self.play(Write(title), run_time=1.5)
-        self.wait(0.5)
 
         # --- Tip 1: Break it down ---
         tip1_text = Text("1. Break tasks into tiny steps", font_size=28, color=WHITE)
@@ -248,7 +238,6 @@ class Tips(Scene):
         narrator.narrate("Remember: these strategies work because they make starting easier.", duration=3)
         self.play(
             FadeOut(VGroup(tip5, goal_label, arrow, system_label)),
-            FadeOut(title),
             run_time=1.5
         )
 
