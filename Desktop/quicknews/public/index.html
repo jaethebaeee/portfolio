@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickScores – Clean, Text‑Only News</title>
+    <meta name="description" content="QuickScores: lightning‑fast, text‑only daily news by category. Stay informed with breaking news, world events, technology updates, and more.">
+    <meta name="keywords" content="news, breaking news, world news, technology, business, politics, science, health, culture, sports news">
+    <meta name="author" content="QuickScores">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta property="og:title" content="QuickScores – Clean, Text‑Only News">
+    <meta property="og:description" content="QuickScores: lightning‑fast, text‑only daily news by category. Stay informed with breaking news, world events, technology updates, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="/">
+    <meta property="og:image" content="/favicon.ico">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "QuickScores",
+      "description": "Lightning-fast, text-only daily news by category",
+      "url": "https://quickscores.xyz",
+      "publisher": {
+        "@type": "Organization",
+        "name": "QuickScores",
+        "url": "https://quickscores.xyz"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://quickscores.xyz/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Courier New' font-size='28' fill='%23fff'%3EQS%3C/text%3E%3C/svg%3E">
+
+    <!-- Preconnect to AdSense domains for faster loading -->
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net">
+    <link rel="preconnect" href="https://www.google.com">
+
+    <!-- AdSense Script with error handling -->
+    <script>
+        // AdSense initialization with error handling
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adSlots = [];
+
+        // Function to safely push ads
+        window.pushAd = function(adConfig) {
+            try {
+                if (window.adsbygoogle && typeof window.adsbygoogle.push === 'function') {
+                    window.adsbygoogle.push(adConfig);
+                }
+            } catch (e) {
+                console.warn('AdSense push failed:', e);
+            }
+        };
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3331898410671902"
+     crossorigin="anonymous"
+     onerror="console.warn('AdSense script failed to load')"></script>
+
+    <!-- Initialize page-level ads -->
+    <script>
+        pushAd({
+            google_ad_client: "ca-pub-3331898410671902",
+            enable_page_level_ads: true,
+            overlays: {bottom: true}
+        });
+    </script>
+
+    <script defer src="/script-news.js"></script>
+</head>
+<body class="light-mode">
+    <header>
+        <div class="header-content">
+            <div class="header-left">
+                <div class="page-load-time">Page loaded: <span id="page-load-time"></span></div>
+                <div class="data-load-time">Data loaded: <span id="data-load-time"></span></div>
+            </div>
+            <h1 class="site-title">quickscores.xyz</h1>
+            <div class="header-right">
+                <!-- AdSense Banner Ad - Responsive -->
+                <div class="header-ad-wrapper">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3331898410671902"
+                         data-ad-slot="1234567890"
+                         data-ad-format="horizontal"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         pushAd({});
+                    </script>
+                </div>
+                <button id="subscription-toggle" class="subscription-toggle">
+                    📱 Subscribe
+                </button>
+                <button id="theme-toggle" class="theme-toggle">
+                    <span class="dark-mode-text">🌙 Dark Mode</span>
+                    <span class="light-mode-text">☀️ Light Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="leagues-nav-compact">
+        <div class="nav-row">
+            <strong>Sections:</strong>
+            <a href="#top">Top</a>
+            <a href="#world">World</a>
+            <a href="#business">Business</a>
+            <a href="#technology">Technology</a>
+            <a href="#us">US</a>
+            <a href="#politics">Politics</a>
+            <a href="#science">Science</a>
+            <a href="#health">Health</a>
+            <a href="#culture">Culture</a>
+        </div>
+        
+    </div>
+
+    <div class="date-nav">
+        <span id="current-date">Loading...</span>
+        <div class="date-status">Showing latest news</div>
+        <div class="voting-stats">
+            <span id="total-votes">0 votes</span> |
+            <span id="trending-count">0 trending</span>
+            <button id="reset-votes" style="font-size: 10px; padding: 2px 6px; margin-left: 10px; opacity: 0.5;">Reset</button>
+        </div>
+    </div>
+
+    <main class="container">
+        <section id="top" class="league-section">
+            <h2>Top Stories</h2>
+            <div class="games-container" id="top-articles"></div>
+        </section>
+
+        <!-- AdSense In-feed Ad - Optimized -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block; text-align:center;"
+                 data-ad-layout="in-article"
+                 data-ad-format="fluid"
+                 data-ad-client="ca-pub-3331898410671902"
+                 data-ad-slot="2345678901"
+                 data-adtest="off"></ins>
+            <script>
+                 pushAd({});
+            </script>
+        </div>
+
+        <section id="world" class="league-section">
+            <h2>World</h2>
+            <div class="games-container" id="world-articles"></div>
+        </section>
+
+        <!-- AdSense Auto Ad - Strategic placement -->
+        <div class="ad-container auto-ad">
+            <ins class="adsbygoogle"
+                 style="display:block; text-align:center;"
+                 data-ad-client="ca-pub-3331898410671902"
+                 data-ad-slot="auto"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 pushAd({});
+            </script>
+        </div>
+
+        <!-- Ad blocker notice (shown when ad blocker is detected) -->
+        <div class="ad-blocker-notice" id="ad-blocker-notice">
+            <p>🎯 Consider supporting QuickScores by disabling your ad blocker. We rely on ads to provide free news content.</p>
+        </div>
+
+        <section id="business" class="league-section">
+            <h2>Business</h2>
+            <div class="games-container" id="business-articles"></div>
+        </section>
+        <section id="technology" class="league-section">
+            <h2>Technology</h2>
+            <div class="games-container" id="technology-articles"></div>
+        </section>
+        <section id="us" class="league-section">
+            <h2>US</h2>
+            <div class="games-container" id="us-articles"></div>
+        </section>
+        <section id="politics" class="league-section">
+            <h2>Politics</h2>
+            <div class="games-container" id="politics-articles"></div>
+        </section>
+        <section id="science" class="league-section">
+            <h2>Science</h2>
+            <div class="games-container" id="science-articles"></div>
+        </section>
+        <section id="health" class="league-section">
+            <h2>Health</h2>
+            <div class="games-container" id="health-articles"></div>
+        </section>
+        <section id="culture" class="league-section">
+            <h2>Culture</h2>
+            <div class="games-container" id="culture-articles"></div>
+        </section>
+    </main>
+
+    
+
+    <!-- AdSense Footer Banner - Responsive -->
+    <div class="footer-ad">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3331898410671902"
+             data-ad-slot="3456789012"
+             data-ad-format="horizontal"
+             data-full-width-responsive="true"></ins>
+        <script>
+             pushAd({});
+        </script>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="#top">Back to Top</a>
+            <p class="footer-title">quickscores.xyz</p>
+            <div class="social-links">
+                <a href="#twitter">Twitter</a> |
+                <a href="#instagram">Instagram</a> |
+                <a href="#twitch">Twitch</a>
+            </div>
+            <div class="legal-links">
+                <a href="/privacy.html">Privacy Policy</a> | <a href="/terms.html">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const now = new Date();
+        const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        const hh = et.getHours() % 12 || 12;
+        const mm = String(et.getMinutes()).padStart(2, '0');
+        const ss = String(et.getSeconds()).padStart(2, '0');
+        const ampm = et.getHours() >= 12 ? 'PM' : 'AM';
+        const el = document.getElementById('page-load-time');
+        if (el) el.textContent = `${hh}:${mm}:${ss} ${ampm} ET`;
+      });
+
+      // Advanced AdSense Management
+      (function() {
+        // Ad blocker detection
+        window.adBlockEnabled = false;
+        const adBlockTest = document.createElement('div');
+        adBlockTest.innerHTML = '&nbsp;';
+        adBlockTest.className = 'adsbox adsbygoogle ad-banner';
+        adBlockTest.style.position = 'absolute';
+        adBlockTest.style.left = '-10000px';
+        adBlockTest.style.top = '-1000px';
+        adBlockTest.style.width = '1px';
+        adBlockTest.style.height = '1px';
+        document.body.appendChild(adBlockTest);
+
+        setTimeout(() => {
+          if (adBlockTest.offsetHeight === 0 || adBlockTest.offsetWidth === 0) {
+            window.adBlockEnabled = true;
+            console.log('Ad blocker detected');
+            // Show ad blocker notice
+            const notice = document.getElementById('ad-blocker-notice');
+            if (notice) {
+              notice.classList.add('show');
+            }
+          }
+          document.body.removeChild(adBlockTest);
+        }, 100);
+
+        // Lazy load ads when they come into viewport
+        function lazyLoadAds() {
+          const adElements = document.querySelectorAll('ins.adsbygoogle:not([data-loaded])');
+
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const adElement = entry.target;
+                if (!adElement.hasAttribute('data-loaded')) {
+                  adElement.setAttribute('data-loaded', 'true');
+                  // Ad will load when pushAd is called
+                }
+              }
+            });
+          }, { rootMargin: '100px' });
+
+          adElements.forEach(ad => observer.observe(ad));
+        }
+
+        // Smart ad refresh - only refresh when page is visible
+        let adRefreshInterval;
+        let lastRefreshTime = Date.now();
+
+        function smartAdRefresh() {
+          const now = Date.now();
+          const timeSinceLastRefresh = now - lastRefreshTime;
+
+          // Only refresh if it's been at least 30 seconds and page is visible
+          if (timeSinceLastRefresh >= 30000 && !document.hidden && !window.adBlockEnabled) {
+            try {
+              if (window.adsbygoogle && typeof window.adsbygoogle.push === 'function') {
+                // Refresh specific ad slots instead of all ads
+                const ads = document.querySelectorAll('ins.adsbygoogle[data-ad-slot]');
+                ads.forEach(ad => {
+                  if (ad.offsetParent !== null) { // Only refresh visible ads
+                    pushAd({});
+                  }
+                });
+              }
+              lastRefreshTime = now;
+            } catch (e) {
+              console.warn('Ad refresh failed:', e);
+            }
+          }
+        }
+
+        // Start smart ad refresh
+        function startSmartAdRefresh() {
+          if (adRefreshInterval) clearInterval(adRefreshInterval);
+          adRefreshInterval = setInterval(smartAdRefresh, 15000); // Check every 15 seconds
+        }
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            // Pause ad refresh when page is hidden
+            if (adRefreshInterval) clearInterval(adRefreshInterval);
+          } else {
+            // Resume ad refresh when page becomes visible
+            startSmartAdRefresh();
+          }
+        });
+
+        // Initialize lazy loading and smart refresh
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            lazyLoadAds();
+            startSmartAdRefresh();
+          }, 3000); // Wait 3 seconds for initial page load
+        });
+
+        // Performance monitoring
+        window.adPerformance = {
+          adLoadTime: 0,
+          adErrors: 0,
+          adImpressions: 0
+        };
+
+        // Monitor ad load performance
+        const originalPushAd = window.pushAd;
+        window.pushAd = function(config) {
+          const startTime = performance.now();
+          try {
+            originalPushAd(config);
+            const loadTime = performance.now() - startTime;
+            window.adPerformance.adLoadTime = (window.adPerformance.adLoadTime + loadTime) / 2; // Average
+          } catch (e) {
+            window.adPerformance.adErrors++;
+            console.warn('Ad load error:', e);
+          }
+        };
+
+      })();
+    </script>
+
+    <!-- Subscription Modal -->
+    <div id="subscription-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Get Notified for Future Games & News</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="subscription-form">
+                    <div class="form-group">
+                        <label for="phone-number">Phone Number:</label>
+                        <input type="tel" id="phone-number" placeholder="(123) 456-7890" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Select categories to follow:</label>
+                        <div class="categories-grid">
+                            <label class="category-option">
+                                <input type="checkbox" value="top" checked> Top Stories
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="world"> World
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="business"> Business
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="technology"> Technology
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="us"> US
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="politics"> Politics
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="science"> Science
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="health"> Health
+                            </label>
+                            <label class="category-option">
+                                <input type="checkbox" value="culture"> Culture
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="subscribe-btn">Subscribe to Notifications</button>
+                </form>
+                <div id="subscription-status" class="status-message"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

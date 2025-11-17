@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - QuickScores</title>
+    <meta name="description" content="Privacy Policy for QuickScores - Clean, Text-Only News">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Courier New' font-size='28' fill='%23fff'%3EQS%3C/text%3E%3C/svg%3E">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3331898410671902"
+     crossorigin="anonymous"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-3331898410671902",
+              enable_page_level_ads: true
+         });
+    </script>
+</head>
+<body class="light-mode">
+    <header>
+        <div class="header-content">
+            <div class="header-left">
+                <div class="page-load-time">Page loaded: <span id="page-load-time"></span></div>
+            </div>
+            <h1 class="site-title"><a href="/" style="color: inherit; text-decoration: none;">quicknews.xyz</a></h1>
+            <div class="header-right">
+                <button id="theme-toggle" class="theme-toggle">
+                    <span class="dark-mode-text">🌙 Dark Mode</span>
+                    <span class="light-mode-text">☀️ Light Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+        <h1>Privacy Policy</h1>
+        <p><em>Last updated: November 17, 2025</em></p>
+
+        <h2>Information We Collect</h2>
+        <p>QuickNews collects information about you in the following ways:</p>
+        <ul>
+            <li><strong>Information you provide:</strong> We may collect information you provide directly to us, such as when you contact us.</li>
+            <li><strong>Usage information:</strong> We automatically collect certain information about your visit, including your IP address, browser type, referring/exit pages, and operating system.</li>
+            <li><strong>Cookies:</strong> We use cookies and similar technologies to enhance your experience on our site.</li>
+        </ul>
+
+        <h2>How We Use Your Information</h2>
+        <p>We use the information we collect to:</p>
+        <ul>
+            <li>Provide, maintain, and improve our services</li>
+            <li>Process transactions and send related information</li>
+            <li>Send you technical notices, updates, security alerts, and support messages</li>
+            <li>Respond to your comments, questions, and requests</li>
+            <li>Monitor and analyze trends, usage, and activities</li>
+        </ul>
+
+        <h2>Google AdSense</h2>
+        <p>We use Google AdSense to serve advertisements on our website. Google AdSense may use cookies and web beacons to collect information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you.</p>
+
+        <p>You can learn more about Google's privacy practices at <a href="https://policies.google.com/privacy" target="_blank">Google Privacy Policy</a> and view their opt-out options at <a href="https://adssettings.google.com/" target="_blank">Google Ad Settings</a>.</p>
+
+        <h2>Data Sharing</h2>
+        <p>We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy.</p>
+
+        <h2>Data Security</h2>
+        <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+
+        <h2>Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+            <li>Access the personal information we hold about you</li>
+            <li>Correct any inaccurate personal information</li>
+            <li>Request deletion of your personal information</li>
+            <li>Object to or restrict processing of your personal information</li>
+        </ul>
+
+        <h2>Changes to This Privacy Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@quicknews.xyz">privacy@quicknews.xyz</a></p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <a href="#top">Back to Top</a>
+            <p class="footer-title">quicknews.xyz</p>
+            <div class="social-links">
+                <a href="#twitter">Twitter</a> |
+                <a href="#instagram">Instagram</a> |
+                <a href="#twitch">Twitch</a>
+            </div>
+            <div class="legal-links">
+                <a href="/privacy.html">Privacy Policy</a> | <a href="/terms.html">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script defer src="/script-news.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const now = new Date();
+        const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        const hh = et.getHours() % 12 || 12;
+        const mm = String(et.getMinutes()).padStart(2, '0');
+        const ss = String(et.getSeconds()).padStart(2, '0');
+        const ampm = et.getHours() >= 12 ? 'PM' : 'AM';
+        const el = document.getElementById('page-load-time');
+        if (el) el.textContent = `${hh}:${mm}:${ss} ${ampm} ET`;
+      });
+    </script>
+</body>
+</html>
