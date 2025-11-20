@@ -1,0 +1,13 @@
+{
+  "name": "jae-personal-website",
+  "version": "1.0.0",
+  "description": "Interactive 3D voxel portfolio website with AI chat",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "start": "npm run dev",
+    "install": "cd frontend && npm install"
+  },
+  "private": true
+}
