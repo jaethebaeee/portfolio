@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { VoxelWorld } from './components/3D/VoxelWorld';
 import { VoxelPortfolio } from './components/3D/VoxelPortfolio';
 import { TraditionalWebsite } from './components/TraditionalWebsite';
+import { WebGLErrorBoundary } from './components/UI/WebGLErrorBoundary';
 
 type AppMode = 'dog' | 'portfolio' | 'traditional';
 
@@ -16,7 +17,9 @@ function App() {
         aria-label="3D Animated Dog Experience"
         aria-description="Enjoy a cute animated dog with beautiful 3D animations and effects."
       >
-        <VoxelWorld />
+        <WebGLErrorBoundary>
+          <VoxelWorld />
+        </WebGLErrorBoundary>
         <button
           onClick={() => setMode('portfolio')}
           style={{
@@ -46,7 +49,9 @@ function App() {
         aria-label="3D Interactive Portfolio"
         aria-description="Explore Jae's professional portfolio in an immersive 3D environment."
       >
-        <VoxelPortfolio onExit={() => setMode('traditional')} />
+        <WebGLErrorBoundary>
+          <VoxelPortfolio onExit={() => setMode('traditional')} />
+        </WebGLErrorBoundary>
         <div style={{
           position: 'absolute',
           top: '20px',

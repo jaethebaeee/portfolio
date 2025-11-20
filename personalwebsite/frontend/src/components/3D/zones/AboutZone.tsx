@@ -357,13 +357,13 @@ export const AboutZone = React.memo(function AboutZone() {
 
         {/* Zone-specific atmospheric tint is handled by global fog */}
 
-        {/* Debug: Super bright light to test visibility */}
+        {/* Ambient zone illumination for better visibility */}
         <pointLight
           position={[0, 10, 0]}
           color="#ffffff"
-          intensity={10.0}
-          distance={50}
-          decay={1}
+          intensity={0.8}
+          distance={30}
+          decay={2}
         />
 
         {/* Interactive hover effects for waypoints */}

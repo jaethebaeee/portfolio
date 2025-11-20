@@ -187,7 +187,7 @@ export function GamesZone() {
   });
 
   return (
-    <group position={[-15, 0, 15]} ref={gamesRef}>
+    <group position={[0, 0, 15]} ref={gamesRef}>
       <VoxelStructure voxels={gamesVoxels} />
 
       {/* Zone title */}
@@ -217,8 +217,8 @@ export function GamesZone() {
 
       {/* Arcade lighting */}
       <pointLight position={[0, 8, 0]} color="#ffff00" intensity={3} distance={20} />
-      <pointLight position={[-8, 6, 0]} color="#ff0040" intensity={2} distance={15} />
-      <pointLight position={[8, 6, 0]} color="#00ff00" intensity={2} distance={15} />
+      <pointLight position={[-8, 6, 15]} color="#ff0040" intensity={2} distance={15} />
+      <pointLight position={[8, 6, 15]} color="#00ff00" intensity={2} distance={15} />
 
       {/* Floating particles for arcade atmosphere */}
       {enableAdvancedEffects && (

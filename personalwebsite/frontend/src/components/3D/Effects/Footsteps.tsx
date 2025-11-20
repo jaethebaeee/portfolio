@@ -21,6 +21,8 @@ export function Footsteps() {
   const idCounter = useRef(0);
 
   useFrame((_state, delta) => {
+    if (!lastPos.current) return; // Safety check
+
     const dist = lastPos.current.distanceTo(character.position);
     accum.current += dist;
     lastPos.current.copy(character.position);

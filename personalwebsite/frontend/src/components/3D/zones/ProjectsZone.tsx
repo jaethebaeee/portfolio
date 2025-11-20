@@ -691,10 +691,10 @@ export const ProjectsZone = React.memo(function ProjectsZone() {
         />
 
         {/* Performance-aware particle atmosphere */}
-        {enableAdvancedEffects && (
+        {enableAdvancedEffects && particleCount > 0 && (
           <>
             <ParticleField
-              count={Math.floor(particleCount * 2)}
+              count={Math.max(3, Math.floor(particleCount * 0.8))}
               position={[0, 8, 0]}
               color="#4ecdc4"
               size={0.012}
@@ -703,7 +703,7 @@ export const ProjectsZone = React.memo(function ProjectsZone() {
             />
 
             <ParticleField
-              count={Math.floor(particleCount * 1.5)}
+              count={Math.max(2, Math.floor(particleCount * 0.6))}
               position={[0, 6, 0]}
               color="#ffe66d"
               size={0.008}
