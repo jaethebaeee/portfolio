@@ -12,7 +12,7 @@ export const projectsContent = {
       impact: "Streamlined group purchasing with live coordination",
       status: "Completed",
       links: {
-        demo: "https://groupbuyapp.demo",
+        demo: "https://groupbuy.app",
         github: "github.com/jaekim/groupbuyapp"
       },
       color: "cyan"

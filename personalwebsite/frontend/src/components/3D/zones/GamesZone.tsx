@@ -11,6 +11,7 @@ import * as THREE from 'three';
 export function GamesZone() {
   const performanceMetrics = usePerformanceMonitor();
   const gamesRef = useRef<THREE.Group>(null);
+  // eslint-disable-next-line no-unused-vars
   const [_slotMachineSpinning, _setSlotMachineSpinning] = useState(false);
 
   // Adapt global performance metrics to component needs
