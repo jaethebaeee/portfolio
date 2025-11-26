@@ -1,0 +1,25 @@
+{
+  "common": {
+    "dashboard": "대시보드",
+    "analytics": "분석",
+    "marketing": "마케팅",
+    "campaigns": "캠페인",
+    "patients": "환자",
+    "appointments": "예약",
+    "settings": "설정",
+    "logout": "로그아웃",
+    "login": "로그인",
+    "welcome": "환영합니다",
+    "totalPatients": "전체 환자",
+    "totalAppointments": "전체 예약",
+    "totalRevenue": "총 매출",
+    "activeCampaigns": "진행 중인 캠페인"
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "overview": "개요",
+    "recentActivity": "최근 활동",
+    "statistics": "통계"
+  }
+}
+

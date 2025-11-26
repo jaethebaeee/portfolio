@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "DoctorsFlow Connect",
+  "version": "1.0",
+  "description": "Sync Naver Smart Place bookings to DoctorsFlow CRM",
+  "permissions": [
+    "webRequest",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://partner.booking.naver.com/*",
+    "https://*.doctorsflow.com/*",
+    "http://localhost:3000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://partner.booking.naver.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
+

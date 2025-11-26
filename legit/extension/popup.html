@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 300px; padding: 10px; font-family: sans-serif; }
+    .status { margin-top: 10px; padding: 10px; border-radius: 4px; }
+    .success { background: #e6fffa; color: #2c7a7b; }
+    .error { background: #fff5f5; color: #c53030; }
+    button { width: 100%; padding: 8px; background: #3182ce; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #2c5282; }
+  </style>
+</head>
+<body>
+  <h3>DoctorsFlow Connect</h3>
+  <p>네이버 예약 자동 동기화</p>
+  
+  <div id="login-section">
+    <input type="text" id="userId" placeholder="User ID (Demo)" style="width: 100%; margin-bottom: 10px; padding: 5px;">
+    <button id="saveBtn">연동 설정 저장</button>
+  </div>
+
+  <div id="status" class="status" style="display: none;"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
