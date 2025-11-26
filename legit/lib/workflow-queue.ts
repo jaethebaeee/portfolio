@@ -3,7 +3,7 @@
  * Distributed workflow execution using Redis-based queues
  */
 
-import { supabase } from './supabase';
+import { createServerClient } from './supabase';
 import { Workflow, Patient, Appointment } from './database.types';
 
 export interface WorkflowJob {
@@ -156,6 +156,7 @@ export class WorkflowQueue {
   // Uses Postgres locking to prevent race conditions in serverless environment
   // @param processImmediately If true, awaits execution of jobs (best for Serverless Cron)
   async loadScheduledJobs(processImmediately = false): Promise<void> {
+    const supabase = createServerClient();
     if (!supabase) return; // Safety check
 
     const now = Date.now();
@@ -291,6 +292,9 @@ export class WorkflowQueue {
       const { enhancedWorkflowEngine } = await import('./workflow-execution-engine');
 
       // Get workflow data
+      const supabase = createServerClient();
+      if (!supabase) throw new Error('Supabase client not initialized');
+
       const { data: workflow, error: wfError } = await supabase
         .from('workflows')
         .select('*')
@@ -404,6 +408,9 @@ export class WorkflowQueue {
     this.completedJobs.push(job);
 
     // Update database
+    const supabase = createServerClient();
+    if (!supabase) return;
+
     await supabase
       .from('workflow_jobs')
       .update({
@@ -429,6 +436,9 @@ export class WorkflowQueue {
     this.failedJobs.push(job);
 
     // Update database
+    const supabase = createServerClient();
+    if (!supabase) return;
+
     await supabase
       .from('workflow_jobs')
       .update({
@@ -442,15 +452,33 @@ export class WorkflowQueue {
 
   // Retry job
   private async retryJob(job: WorkflowJob, errorMessage: string): Promise<void> {
+    // Use WorkflowErrorHandler for smart retry strategy
+    const { WorkflowErrorHandler } = await import('./workflow-error-handler');
+    const retryStrategy = WorkflowErrorHandler.getRetryStrategy(
+      errorMessage,
+      job.retryCount,
+      1000, // base delay 1s
+      60000 // max delay 60s
+    );
+    
+    if (!retryStrategy.shouldRetry) {
+      // Max retries exceeded or non-retryable error
+      await this.failJob(job.id, `Max retries exceeded: ${errorMessage}`);
+      return;
+    }
+    
     const retryJob = {
       ...job,
       retryCount: job.retryCount + 1,
       createdAt: Date.now(),
-      // Exponential backoff: 1s, 2s, 4s, 8s...
-      scheduledFor: Date.now() + Math.pow(2, job.retryCount) * 1000
+      maxRetries: retryStrategy.maxRetries,
+      scheduledFor: Date.now() + retryStrategy.delay
     };
 
     // Update retry count in database
+    const supabase = createServerClient();
+    if (!supabase) return;
+
     await supabase
       .from('workflow_jobs')
       .update({
@@ -474,6 +502,9 @@ export class WorkflowQueue {
       originalExecutionId?: string;
     }
   ): Promise<void> {
+    const supabase = createServerClient();
+    if (!supabase) return;
+
     await supabase
       .from('workflow_jobs')
       .insert({
@@ -501,6 +532,9 @@ export class WorkflowQueue {
 
   // Update job status
   private async updateJobStatus(jobId: string, status: string): Promise<void> {
+    const supabase = createServerClient();
+    if (!supabase) return;
+
     await supabase
       .from('workflow_jobs')
       .update({
@@ -569,6 +603,11 @@ export class WorkflowQueue {
 
     // Check database
     try {
+      const supabase = createServerClient();
+      if (!supabase) {
+        return { job: null, status: 'not_found' };
+      }
+
       const { data, error } = await supabase
         .from('workflow_jobs')
         .select('*')
@@ -616,6 +655,9 @@ export class WorkflowQueue {
     }
 
     // Update database
+    const supabase = createServerClient();
+    if (!supabase) return false;
+
     await supabase
       .from('workflow_jobs')
       .update({
@@ -637,6 +679,9 @@ export class WorkflowQueue {
     this.failedJobs = this.failedJobs.filter(job => job.createdAt > cutoffTime);
 
     // Clean up database
+    const supabase = createServerClient();
+    if (!supabase) return;
+
     await supabase
       .from('workflow_jobs')
       .delete()

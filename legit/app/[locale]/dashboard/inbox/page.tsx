@@ -20,6 +20,8 @@ type ConversationWithPatient = Conversation & {
   messages: Message[];
 };
 
+const PAGE_SIZE = 20; // Conversations per page
+
 export default function InboxPage() {
   const { userId, isLoaded } = useAuth();
   const [conversations, setConversations] = useState<ConversationWithPatient[]>([]);
@@ -27,6 +29,9 @@ export default function InboxPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalConversations, setTotalConversations] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
   const supabase = createClientClient();
 
@@ -57,18 +62,23 @@ export default function InboxPage() {
     }
   }, [isLoaded, userId, selectedConversation]);
 
-  const fetchConversations = async () => {
+  const fetchConversations = async (pageNum: number = 1) => {
     if (!userId) return;
     
-    // Fetch conversations with patient details
-    const { data, error } = await supabase
+    // PERFORMANCE FIX: Add pagination to prevent loading all conversations
+    const rangeStart = (pageNum - 1) * PAGE_SIZE;
+    const rangeEnd = rangeStart + PAGE_SIZE - 1;
+    
+    // Fetch conversations with patient details (paginated)
+    const { data, error, count } = await supabase
       .from('conversations')
       .select(`
         *,
         patient:patients(*)
-      `)
+      `, { count: 'exact' })
       .eq('user_id', userId)
-      .order('last_message_at', { ascending: false });
+      .order('last_message_at', { ascending: false })
+      .range(rangeStart, rangeEnd);
 
     if (error) {
       console.error('Failed to fetch conversations:', error);
@@ -77,7 +87,16 @@ export default function InboxPage() {
       return;
     }
 
-    setConversations(data as any);
+    if (pageNum === 1) {
+      // First page: replace conversations
+      setConversations(data as any);
+    } else {
+      // Subsequent pages: append conversations
+      setConversations(prev => [...prev, ...(data as any)]);
+    }
+    
+    setTotalConversations(count || 0);
+    setHasMore((count || 0) > rangeEnd + 1);
     setLoading(false);
   };
 

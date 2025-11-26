@@ -249,10 +249,13 @@ function VisualWorkflowBuilderContent({ initialData, onSave, onCancel }: VisualW
           {nodes.length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
               <div className="bg-background/80 backdrop-blur-sm p-6 rounded-lg border shadow-lg text-center max-w-md">
-                <h3 className="text-lg font-semibold mb-2">워크플로우 시작하기</h3>
+                <h3 className="text-lg font-semibold mb-2">워크플로우 빌더 (베타)</h3>
                 <p className="text-muted-foreground text-sm">
-                  왼쪽 사이드바에서 <strong>노드를 드래그</strong>하여<br />
-                  캔버스에 놓으세요.
+                  현재는 간단한 순차적 워크플로우(Linear Workflow) 사용을 권장합니다.<br />
+                  복잡한 분기가 필요한 경우에만 이 빌더를 사용하세요.
+                </p>
+                <p className="text-muted-foreground text-sm mt-2">
+                  왼쪽 사이드바에서 <strong>노드를 드래그</strong>하여 캔버스에 놓으세요.
                 </p>
               </div>
             </div>

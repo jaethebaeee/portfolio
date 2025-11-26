@@ -93,7 +93,10 @@ export async function POST(
     // 실제로는 웹훅 ID만으로 조회해야 함
     const supabase = createServerClient();
     if (!supabase) {
-      throw new Error('Supabase가 설정되지 않았습니다.');
+      return NextResponse.json(
+        { error: 'Supabase가 설정되지 않았습니다.' },
+        { status: 500 }
+      );
     }
 
     const { data: webhook, error: webhookError } = await supabase

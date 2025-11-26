@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 import { ParallelWorkflowEngine } from '@/lib/workflow-engine-parallel';
 import { validateKoreanPhoneNumber } from '@/lib/phone-validation';
-import crypto from 'crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 
 /**
  * POST /api/webhooks/incoming-message
@@ -40,13 +40,12 @@ export async function POST(req: NextRequest) {
       }
     } else {
       // Verify signature using HMAC-SHA256
-      const expectedSignature = crypto
-        .createHmac('sha256', webhookSecret)
+      const expectedSignature = createHmac('sha256', webhookSecret)
         .update(body)
         .digest('hex');
       
       // Use constant-time comparison to prevent timing attacks
-      const isValid = crypto.timingSafeEqual(
+      const isValid = timingSafeEqual(
         Buffer.from(signature),
         Buffer.from(expectedSignature)
       );

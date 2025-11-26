@@ -46,7 +46,8 @@ export default function AppointmentsPage() {
   const { data: appointments = [], isLoading, error } = useAppointments(statusFilter);
   const { data: patients = [] } = usePatients();
 
-  // TODO: Implement doctors query hook
+  // Doctors query is not yet implemented in the backend hook system. 
+  // This is a placeholder for future implementation.
   const doctors: any[] = [];
   const createAppointmentMutation = useCreateAppointment();
   const updateAppointmentMutation = useUpdateAppointment();

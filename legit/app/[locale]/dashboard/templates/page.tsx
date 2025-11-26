@@ -20,6 +20,32 @@ export default function TemplatesPage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
 
+  const saveTemplates = useCallback((newTemplates: MarketingTemplate[]) => {
+    localStorage.setItem("marketing_templates", JSON.stringify(newTemplates));
+  }, []);
+
+  const initializeSpecialtyTemplates = useCallback((specialty: string) => {
+    let specialtyTemplates: Omit<MarketingTemplate, 'id' | 'createdAt' | 'updatedAt'>[];
+
+    switch (specialty) {
+      case '안과':
+        specialtyTemplates = eyeClinicTemplates;
+        break;
+      default:
+        specialtyTemplates = defaultTemplates;
+    }
+
+    const initialized: MarketingTemplate[] = specialtyTemplates.map((t, idx) => ({
+      ...t,
+      id: `template-${specialty}-${idx + 1}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+
+    setTemplates(initialized);
+    saveTemplates(initialized);
+  }, [saveTemplates]);
+
   useEffect(() => {
     // 로컬 스토리지에서 템플릿 로드 또는 기본 템플릿 사용
     const savedTemplates = localStorage.getItem("marketing_templates");
@@ -42,41 +68,15 @@ export default function TemplatesPage() {
     } else {
       initializeSpecialtyTemplates(savedSpecialty);
     }
-  }, []);
+  }, [initializeSpecialtyTemplates]);
 
-  const initializeSpecialtyTemplates = (specialty: string) => {
-    let specialtyTemplates: Omit<MarketingTemplate, 'id' | 'createdAt' | 'updatedAt'>[];
-
-    switch (specialty) {
-      case '안과':
-        specialtyTemplates = eyeClinicTemplates;
-        break;
-      default:
-        specialtyTemplates = defaultTemplates;
-    }
-
-    const initialized: MarketingTemplate[] = specialtyTemplates.map((t, idx) => ({
-      ...t,
-      id: `template-${specialty}-${idx + 1}`,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
-
-    setTemplates(initialized);
-    saveTemplates(initialized);
-  };
-
-  const handleSpecialtyChange = (specialty: string) => {
+  const handleSpecialtyChange = useCallback((specialty: string) => {
     setSelectedSpecialty(specialty);
     localStorage.setItem("selected_specialty", specialty);
     initializeSpecialtyTemplates(specialty);
     setCurrentPage(0); // 진료과목 변경 시 페이지 리셋
     toast.success(`${specialtyConfigs[specialty]?.name || specialty} 템플릿으로 전환되었습니다.`);
-  };
-
-  const saveTemplates = (newTemplates: MarketingTemplate[]) => {
-    localStorage.setItem("marketing_templates", JSON.stringify(newTemplates));
-  };
+  }, [initializeSpecialtyTemplates]);
 
   const handleUpdate = (newTemplates: MarketingTemplate[]) => {
     const updated = newTemplates.map((t) => ({

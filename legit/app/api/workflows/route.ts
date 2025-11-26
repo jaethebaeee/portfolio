@@ -65,6 +65,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 워크플로우 검증 (visual_data가 있는 경우)
+    if (body.visual_data) {
+      try {
+        const { validateWorkflow } = await import('@/lib/workflow-validation');
+        const { Node, Edge } = await import('@xyflow/react');
+        
+        const nodes = (body.visual_data.nodes || []) as Node[];
+        const edges = (body.visual_data.edges || []) as Edge[];
+        
+        const validation = validateWorkflow(nodes, edges);
+        
+        if (!validation.isValid) {
+          return NextResponse.json(
+            {
+              error: '워크플로우 검증 실패',
+              validationErrors: validation.errors,
+              warnings: validation.warnings,
+              nodeErrors: validation.nodeErrors
+            },
+            { status: 400 }
+          );
+        }
+      } catch (validationError: any) {
+        console.error('워크플로우 검증 오류:', validationError);
+        return NextResponse.json(
+          { error: `워크플로우 검증 중 오류가 발생했습니다: ${validationError.message}` },
+          { status: 400 }
+        );
+      }
+    }
+
     // Build workflow input
     const workflowInput: Partial<Workflow> = {
       name: body.name,

@@ -50,6 +50,8 @@ function fromDatabaseTemplate(dbTemplate: any): MarketingTemplate {
  */
 export async function getTemplates(userId: string): Promise<MarketingTemplate[]> {
   const supabase = createServerClient();
+  if (!supabase) throw new Error('Supabase client not initialized');
+
   const { data, error } = await supabase
     .from('templates')
     .select('*')

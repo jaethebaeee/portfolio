@@ -2,18 +2,58 @@ import { createServerClient } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { ParallelWorkflowEngine } from '@/lib/workflow-engine-parallel';
 import { getAuth } from '@clerk/nextjs/server';
+import { rateLimit, rateLimitConfigs } from '@/lib/rate-limit';
+
+// Maximum batch size for immediate execution
+const MAX_BATCH_SIZE = 100;
 
 export async function POST(req: NextRequest) {
-  const { userId } = getAuth(req);
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   try {
+    // SECURITY: Rate limiting
+    const rateLimitResult = await rateLimit({
+      windowMs: 60 * 1000, // 1 minute
+      maxRequests: 5, // More restrictive for batch operations
+      message: 'Too many batch execution requests. Please try again later.',
+    })(req);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        {
+          error: rateLimitResult.message || 'Too many requests',
+          remaining: rateLimitResult.remaining,
+          resetTime: rateLimitResult.resetTime,
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitResult.resetTime.toString(),
+          },
+        }
+      );
+    }
+
+    const { userId } = getAuth(req);
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { workflowId, patientIds } = await req.json();
 
     if (!workflowId || !patientIds || !Array.isArray(patientIds) || patientIds.length === 0) {
       return NextResponse.json({ error: 'Invalid request parameters' }, { status: 400 });
+    }
+
+    // SECURITY: Limit batch size to prevent DoS and timeout
+    if (patientIds.length > MAX_BATCH_SIZE) {
+      return NextResponse.json(
+        {
+          error: `Batch size exceeds maximum of ${MAX_BATCH_SIZE} patients`,
+          maxBatchSize: MAX_BATCH_SIZE,
+          receivedSize: patientIds.length,
+        },
+        { status: 400 }
+      );
     }
 
     const supabase = createServerClient();

@@ -3,7 +3,6 @@
  * Combines parallel execution, caching, circuit breaker, and state persistence
  */
 
-import { supabase } from './supabase';
 import { Workflow, Patient, Appointment } from './database.types';
 import { ParallelWorkflowEngine } from './workflow-engine-parallel';
 import { WorkflowCache } from './workflow-cache';

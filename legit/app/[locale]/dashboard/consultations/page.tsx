@@ -65,7 +65,7 @@ export default function ConsultationPage() {
   const handleUpdate = async (data: Partial<Consultation>) => {
     if (!userId || !editingConsultation) return;
     try {
-      await updateConsultation(editingConsultation.id, data);
+      await updateConsultation(userId, editingConsultation.id, data);
       await fetchData();
       toast.success("상담 기록이 수정되었습니다.");
     } catch (error) {
@@ -74,9 +74,9 @@ export default function ConsultationPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
+    if (!userId || !confirm("정말 삭제하시겠습니까?")) return;
     try {
-      await deleteConsultation(id);
+      await deleteConsultation(userId, id);
       await fetchData();
       toast.success("상담 기록이 삭제되었습니다.");
     } catch (error) {

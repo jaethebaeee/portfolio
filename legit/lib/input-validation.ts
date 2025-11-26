@@ -39,13 +39,15 @@ export function validateRequestBody(body: any, schema: ValidationSchema): Valida
 
 interface ValidationRule {
   required?: boolean;
-  type?: 'string' | 'number' | 'boolean' | 'phone';
+  type?: 'string' | 'number' | 'boolean' | 'phone' | 'array' | 'object';
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
   allowedValues?: any[];
   sanitize?: boolean;
   customValidator?: (value: any) => string | null;
+  arrayItemValidator?: (value: any, index: number) => string | null;
+  objectSchema?: ValidationSchema;
 }
 
 export interface ValidationSchema {
@@ -91,6 +93,41 @@ function validateField(value: any, rules: ValidationRule, fieldName: string): st
         const phoneValidation = validateKoreanPhoneNumber(value);
         if (!phoneValidation.isValid) {
           errors.push(phoneValidation.error || `${fieldName}은(는) 올바른 전화번호 형식이 아닙니다.`);
+        }
+        break;
+      case 'array':
+        if (!Array.isArray(value)) {
+          errors.push(`${fieldName}은(는) 배열이어야 합니다.`);
+        } else {
+          // Array length validation
+          if (rules.minLength !== undefined && value.length < rules.minLength) {
+            errors.push(`${fieldName}은(는) 최소 ${rules.minLength}개의 항목이 필요합니다.`);
+          }
+          if (rules.maxLength !== undefined && value.length > rules.maxLength) {
+            errors.push(`${fieldName}은(는) 최대 ${rules.maxLength}개의 항목까지 허용됩니다.`);
+          }
+          // Array item validation
+          if (rules.arrayItemValidator) {
+            value.forEach((item, index) => {
+              const itemError = rules.arrayItemValidator!(item, index);
+              if (itemError) {
+                errors.push(`${fieldName}[${index}]: ${itemError}`);
+              }
+            });
+          }
+        }
+        break;
+      case 'object':
+        if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+          errors.push(`${fieldName}은(는) 객체여야 합니다.`);
+        } else if (rules.objectSchema) {
+          // Validate nested object schema
+          const nestedValidation = validateRequestBody(value, rules.objectSchema);
+          if (!nestedValidation.isValid) {
+            nestedValidation.errors.forEach(error => {
+              errors.push(`${fieldName}.${error}`);
+            });
+          }
         }
         break;
     }
@@ -199,6 +236,64 @@ export const validationSchemas = {
       type: 'string' as const,
       maxLength: 2000, // LMS 길이 고려
       sanitize: true,
+    },
+  },
+
+  updateWorkflow: {
+    name: {
+      type: 'string' as const,
+      minLength: 1,
+      maxLength: 200,
+      sanitize: true,
+    },
+    description: {
+      type: 'string' as const,
+      maxLength: 1000,
+      sanitize: true,
+    },
+    trigger_type: {
+      type: 'string' as const,
+      allowedValues: ['post_surgery', 'schedule'],
+    },
+    target_surgery_type: {
+      type: 'string' as const,
+      maxLength: 100,
+      sanitize: true,
+    },
+    steps: {
+      type: 'array' as const,
+      arrayItemValidator: (item: any, index: number) => {
+        if (typeof item !== 'object' || item === null || Array.isArray(item)) {
+          return '각 스텝은 객체여야 합니다.';
+        }
+        if (typeof item.day !== 'number' || item.day < 0) {
+          return 'day는 0 이상의 숫자여야 합니다.';
+        }
+        if (!['survey', 'photo'].includes(item.type)) {
+          return 'type은 "survey" 또는 "photo"여야 합니다.';
+        }
+        if (item.title !== undefined && typeof item.title !== 'string') {
+          return 'title은 문자열이어야 합니다.';
+        }
+        if (item.message_template !== undefined && typeof item.message_template !== 'string') {
+          return 'message_template은 문자열이어야 합니다.';
+        }
+        return null;
+      },
+    },
+    visual_data: {
+      type: 'object' as const,
+      objectSchema: {
+        nodes: {
+          type: 'array' as const,
+        },
+        edges: {
+          type: 'array' as const,
+        },
+      },
+    },
+    is_active: {
+      type: 'boolean' as const,
     },
   },
 };

@@ -50,9 +50,46 @@ export async function executeDailyWorkflows(userId: string) {
       query = query.eq('surgery_type', workflow.target_surgery_type);
     }
 
-    // Optimization: Limit to last 30 days for now
+    // PERFORMANCE FIX: Calculate date range based on workflow's max delay
+    // This ensures workflows with longer delays (e.g., 6 months) still execute correctly
+    let maxDelayDays = 30; // Default fallback
+    
+    if (isVisual && workflow.visual_data) {
+      // Calculate max delay from visual workflow nodes
+      const visualData = workflow.visual_data as any;
+      if (visualData.nodes && Array.isArray(visualData.nodes)) {
+        const delayNodes = visualData.nodes.filter((n: any) => n.type === 'delay');
+        if (delayNodes.length > 0) {
+          maxDelayDays = Math.max(
+            ...delayNodes.map((n: any) => {
+              const delay = n.data?.delay;
+              if (!delay) return 0;
+              
+              // Convert different delay types to days
+              if (delay.type === 'days' || delay.type === 'business_days') {
+                return delay.value || 0;
+              } else if (delay.type === 'hours') {
+                return Math.ceil((delay.value || 0) / 24);
+              } else if (delay.type === 'minutes') {
+                return Math.ceil((delay.value || 0) / (24 * 60));
+              }
+              return 0;
+            })
+          );
+        }
+      }
+    } else if (workflow.steps && Array.isArray(workflow.steps)) {
+      // Calculate max delay from linear workflow steps
+      maxDelayDays = Math.max(...workflow.steps.map(s => s.day || 0));
+    }
+    
+    // Add buffer (7 days) for safety and ensure minimum of 30 days
+    const bufferDays = 7;
+    const calculatedDays = maxDelayDays + bufferDays;
+    const dateRangeDays = Math.max(calculatedDays, 30);
+    
     const dateFrom = new Date(today);
-    dateFrom.setDate(today.getDate() - 30);
+    dateFrom.setDate(today.getDate() - dateRangeDays);
     
     query = query.gte('appointment_date', dateFrom.toISOString().split('T')[0]);
 
@@ -206,14 +243,25 @@ export async function executeDailyWorkflows(userId: string) {
             }).eq('id', executionId);
           }
         } else {
-          logs.push(`Failed: ${patient.name} (${result.error})`);
+          const errorMessage = result.error || 'Unknown error';
+          logs.push(`Failed: ${patient.name} (${errorMessage})`);
 
-          // Update Execution Log Failure
+          // Update Execution Log Failure with error classification
           if (executionId) {
+            const { WorkflowErrorHandler } = await import('./workflow-error-handler');
+            const errorCategory = WorkflowErrorHandler.classifyError(errorMessage);
+            const severity = WorkflowErrorHandler.getSeverity(errorMessage);
+            
             await supabase.from('workflow_executions').update({
               status: 'failed',
               completed_at: new Date().toISOString(),
-              error_message: result.error
+              error_message: errorMessage,
+              execution_data: {
+                ...executionData,
+                error_category: errorCategory,
+                error_severity: severity,
+                failed_at: new Date().toISOString()
+              }
             }).eq('id', executionId);
           }
         }

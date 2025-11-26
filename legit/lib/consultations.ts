@@ -2,10 +2,13 @@
  * 상담(Consultation) 관리 라이브러리
  */
 
-import { supabase } from './supabase';
+import { createServerClient } from './supabase';
 import { Consultation, ConsultationStatus, ConsultationOutcome, ConsultationSource } from './database.types';
 
 export async function getConsultations(userId: string) {
+  const supabase = createServerClient();
+  if (!supabase) throw new Error('Supabase client not initialized');
+
   const { data, error } = await supabase
     .from('consultations')
     .select(`
@@ -20,6 +23,9 @@ export async function getConsultations(userId: string) {
 }
 
 export async function getConsultationStats(userId: string) {
+  const supabase = createServerClient();
+  if (!supabase) throw new Error('Supabase client not initialized');
+
   const { data, error } = await supabase
     .from('consultations')
     .select('status, outcome, source, quoted_price, deposit_amount')
@@ -56,6 +62,9 @@ export async function getConsultationStats(userId: string) {
 }
 
 export async function createConsultation(userId: string, consultation: Partial<Consultation>) {
+  const supabase = createServerClient();
+  if (!supabase) throw new Error('Supabase client not initialized');
+
   const { data, error } = await supabase
     .from('consultations')
     .insert({ ...consultation, user_id: userId })
@@ -66,11 +75,15 @@ export async function createConsultation(userId: string, consultation: Partial<C
   return data;
 }
 
-export async function updateConsultation(id: string, updates: Partial<Consultation>) {
+export async function updateConsultation(userId: string, id: string, updates: Partial<Consultation>) {
+  const supabase = createServerClient();
+  if (!supabase) throw new Error('Supabase client not initialized');
+
   const { data, error } = await supabase
     .from('consultations')
     .update(updates)
     .eq('id', id)
+    .eq('user_id', userId)
     .select()
     .single();
 
@@ -78,11 +91,15 @@ export async function updateConsultation(id: string, updates: Partial<Consultati
   return data;
 }
 
-export async function deleteConsultation(id: string) {
+export async function deleteConsultation(userId: string, id: string) {
+  const supabase = createServerClient();
+  if (!supabase) throw new Error('Supabase client not initialized');
+
   const { error } = await supabase
     .from('consultations')
     .delete()
-    .eq('id', id);
+    .eq('id', id)
+    .eq('user_id', userId);
 
   if (error) throw error;
 }
