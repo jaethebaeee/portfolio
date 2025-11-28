@@ -1,0 +1,2 @@
+export { BaseBuilding } from './BaseBuilding';
+

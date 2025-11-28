@@ -33,6 +33,36 @@ export const projectsContent = {
       color: "yellow"
     },
     {
+      id: "bodytrak",
+      title: "Real-time Biosensor Analytics",
+      subtitle: "BodyTrak Research at Cornell Sci Fi Lab",
+      description: "Advanced research platform for processing continuous biosensor data from BodyTrak wearable devices with ML-driven health insights.",
+      technologies: ["Python", "MATLAB", "R", "TensorFlow", "Apache Kafka"],
+      features: ["Signal processing algorithms", "Real-time anomaly detection", "Clinical validation"],
+      impact: "Published in 2 peer-reviewed journals",
+      status: "Completed",
+      links: {
+        demo: "#",
+        github: "#"
+      },
+      color: "purple"
+    },
+    {
+      id: "materials-eml",
+      title: "Materials Science EML Research",
+      subtitle: "Electronic Materials Lab with Hyeong Seop Kim",
+      description: "Collaborative research in electronic materials laboratory focusing on semiconductor characterization and device analysis.",
+      technologies: ["Python", "MATLAB", "LabVIEW", "COMSOL Multiphysics", "SEM/EDX"],
+      features: ["Material characterization", "Electrical property analysis", "Device fabrication"],
+      impact: "Contributed to 3 conference presentations",
+      status: "Completed",
+      links: {
+        demo: "#",
+        github: "#"
+      },
+      color: "orange"
+    },
+    {
       id: "ecommerce",
       title: "E-commerce Platform",
       subtitle: "Full-Stack Shopping Solution",

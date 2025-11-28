@@ -1,13 +1,113 @@
 import { create } from 'zustand';
 import { Vector3 } from 'three';
 
-export type ZoneType = 'about' | 'education' | 'projects' | 'skills' | 'contact' | 'chat' | null;
+// Zone atmosphere configurations
+const ZONE_ATMOSPHERES: Record<string, ZoneAtmosphere> = {
+  about: {
+    ambientIntensity: 0.4,
+    directionalIntensity: 0.6,
+    fogColor: '#1a1a2e',
+    fogNear: 35,
+    fogFar: 200,
+    bloomIntensity: 0.5,
+    toneMappingExposure: 1.0
+  },
+  education: {
+    ambientIntensity: 0.3,
+    directionalIntensity: 0.8,
+    fogColor: '#0f0f23',
+    fogNear: 30,
+    fogFar: 180,
+    bloomIntensity: 0.3,
+    toneMappingExposure: 0.9
+  },
+  skills: {
+    ambientIntensity: 0.5,
+    directionalIntensity: 0.7,
+    fogColor: '#16213e',
+    fogNear: 40,
+    fogFar: 220,
+    bloomIntensity: 0.7,
+    toneMappingExposure: 1.1
+  },
+  projects: {
+    ambientIntensity: 0.4,
+    directionalIntensity: 0.9,
+    fogColor: '#0f3460',
+    fogNear: 25,
+    fogFar: 160,
+    bloomIntensity: 0.8,
+    toneMappingExposure: 1.2
+  },
+  contact: {
+    ambientIntensity: 0.6,
+    directionalIntensity: 0.5,
+    fogColor: '#1a1a2e',
+    fogNear: 45,
+    fogFar: 250,
+    bloomIntensity: 0.6,
+    toneMappingExposure: 0.95
+  },
+  games: {
+    ambientIntensity: 0.8,
+    directionalIntensity: 0.6,
+    fogColor: '#2d1b69',
+    fogNear: 40,
+    fogFar: 250,
+    bloomIntensity: 0.7,
+    toneMappingExposure: 1.1
+  },
+  chat: {
+    ambientIntensity: 0.5,
+    directionalIntensity: 0.7,
+    fogColor: '#1b1b2f',
+    fogNear: 35,
+    fogFar: 200,
+    bloomIntensity: 0.6,
+    toneMappingExposure: 1.05
+  },
+  pet: {
+    ambientIntensity: 0.6,
+    directionalIntensity: 0.5,
+    fogColor: '#1a4d3a',
+    fogNear: 35,
+    fogFar: 200,
+    bloomIntensity: 0.4,
+    toneMappingExposure: 0.95
+  }
+};
+
+export type ZoneType = 'about' | 'education' | 'projects' | 'skills' | 'contact' | 'games' | 'chat' | 'pet' | null;
+
+export type TransitionState = 'idle' | 'portal' | 'cinematic' | 'atmosphere-transition';
 
 interface Character {
   position: Vector3;
   rotation: number;
   isMoving: boolean;
   velocity: Vector3;
+}
+
+interface ZoneAtmosphere {
+  ambientIntensity: number;
+  directionalIntensity: number;
+  fogColor: string;
+  fogNear: number;
+  fogFar: number;
+  bloomIntensity: number;
+  toneMappingExposure: number;
+}
+
+interface ZoneTransition {
+  state: TransitionState;
+  fromZone: ZoneType;
+  toZone: ZoneType;
+  progress: number;
+  duration: number;
+  startTime: number;
+  cameraTarget: Vector3;
+  atmosphereFrom: ZoneAtmosphere;
+  atmosphereTo: ZoneAtmosphere;
 }
 
 interface ThreeDState {
@@ -42,6 +142,13 @@ interface ThreeDState {
   // UI state
   showControls: boolean;
   setShowControls: (_show: boolean) => void;
+
+  // Zone transitions
+  transition: ZoneTransition;
+  startZoneTransition: (_fromZone: ZoneType, _toZone: ZoneType, _cameraTarget: Vector3) => void;
+  updateTransitionProgress: (_progress: number) => void;
+  completeZoneTransition: () => void;
+  cancelZoneTransition: () => void;
 }
 
 export const use3DStore = create<ThreeDState>((set) => ({
@@ -97,5 +204,54 @@ export const use3DStore = create<ThreeDState>((set) => ({
   // UI state
   showControls: true,
   setShowControls: (_show) => set({ showControls: _show }),
-}));
 
+  // Zone transitions
+  transition: {
+    state: 'idle' as TransitionState,
+    fromZone: null,
+    toZone: null,
+    progress: 0,
+    duration: 0,
+    startTime: 0,
+    cameraTarget: new Vector3(),
+    atmosphereFrom: ZONE_ATMOSPHERES.about,
+    atmosphereTo: ZONE_ATMOSPHERES.about
+  },
+  startZoneTransition: (_fromZone, _toZone, _cameraTarget) => set((_state) => ({
+    transition: {
+      state: 'portal',
+      fromZone: _fromZone,
+      toZone: _toZone,
+      progress: 0,
+      duration: 3.0, // 3 seconds total transition
+      startTime: Date.now(),
+      cameraTarget: _cameraTarget.clone(),
+      atmosphereFrom: ZONE_ATMOSPHERES[_fromZone || 'about'] || ZONE_ATMOSPHERES.about,
+      atmosphereTo: ZONE_ATMOSPHERES[_toZone || 'about'] || ZONE_ATMOSPHERES.about
+    }
+  })),
+  updateTransitionProgress: (_progress) => set((state) => ({
+    transition: {
+      ...state.transition,
+      progress: Math.max(0, Math.min(1, _progress))
+    }
+  })),
+  completeZoneTransition: () => set((state) => ({
+    transition: {
+      ...state.transition,
+      state: 'idle',
+      progress: 0,
+      fromZone: null,
+      toZone: null
+    }
+  })),
+  cancelZoneTransition: () => set((state) => ({
+    transition: {
+      ...state.transition,
+      state: 'idle',
+      progress: 0,
+      fromZone: null,
+      toZone: null
+    }
+  })),
+}));

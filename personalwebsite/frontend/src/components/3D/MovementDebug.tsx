@@ -35,3 +35,5 @@ export function MovementDebug() {
   return null; // This component only provides controls, no visual output
 }
 
+
+

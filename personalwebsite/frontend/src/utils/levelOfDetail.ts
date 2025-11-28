@@ -84,3 +84,5 @@ export class LevelOfDetail {
 // Global LOD instance
 export const globalLOD = new LevelOfDetail();
 
+
+

@@ -1,78 +1,58 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Group, BackSide } from 'three';
-import { useSpring, animated } from '@react-spring/three';
+import { Text } from '@react-three/drei';
 import { use3DStore } from '@/stores/use3DStore';
 import { Voxel } from './models/VoxelBuilder';
 
-// Simplified, reliable character - easy to render and always visible
+// Enhanced character with better materials and more detail
 const createCharacterBody = () => [
-  // Body (blue shirt) - simplified for better performance
-  { pos: [0, 0.5, 0] as [number, number, number], color: "#4a90e2", size: 1.2 },
-  { pos: [0, 1.2, 0] as [number, number, number], color: "#4a90e2", size: 1.0 },
+  // Body (blue shirt) - plastic material for fabric
+  { pos: [0, 0.5, 0] as [number, number, number], color: "#4a90e2", size: 1.2, materialType: 'plastic' as const },
+  { pos: [0, 1.2, 0] as [number, number, number], color: "#4a90e2", size: 1.0, materialType: 'plastic' as const },
 
-  // Head (skin tone)
-  { pos: [0, 2.0, 0] as [number, number, number], color: "#fdbcb4", size: 1.0 },
+  // Head (skin tone) - standard material
+  { pos: [0, 2.0, 0] as [number, number, number], color: "#fdbcb4", size: 1.0, materialType: 'standard' as const },
 
-  // Simple eyes (black dots)
-  { pos: [-0.2, 2.1, 0.45] as [number, number, number], color: "#000000", size: 0.1 },
-  { pos: [0.2, 2.1, 0.45] as [number, number, number], color: "#000000", size: 0.1 },
+  // Eyes (black dots) - emissive for glow
+  { pos: [-0.2, 2.1, 0.45] as [number, number, number], color: "#000000", size: 0.1, materialType: 'emissive' as const, emissiveIntensity: 0.1 },
+  { pos: [0.2, 2.1, 0.45] as [number, number, number], color: "#000000", size: 0.1, materialType: 'emissive' as const, emissiveIntensity: 0.1 },
 
-  // Mouth (simple smile)
-  { pos: [-0.1, 1.8, 0.45] as [number, number, number], color: "#000000", size: 0.05 },
-  { pos: [0.1, 1.8, 0.45] as [number, number, number], color: "#000000", size: 0.05 },
+  // Mouth (simple smile) - subtle emissive
+  { pos: [0, 1.8, 0.45] as [number, number, number], color: "#000000", size: 0.15, materialType: 'standard' as const },
 
-  // Yankees Hat (improved design)
-  // Main hat crown - classic Yankees navy blue
-  { pos: [0, 2.45, 0] as [number, number, number], color: "#0c2340", size: 0.9 }, // Main crown
-  { pos: [0, 2.4, 0.2] as [number, number, number], color: "#0c2340", size: 0.7 }, // Crown front
-  { pos: [0, 2.4, -0.2] as [number, number, number], color: "#0c2340", size: 0.7 }, // Crown back
+  // Yankees Hat - metallic crown, plastic logo
+  // Main hat crown (felt-like material)
+  { pos: [0, 2.45, 0] as [number, number, number], color: "#0c2340", size: 0.9, materialType: 'rough' as const },
+  { pos: [0, 2.4, 0] as [number, number, number], color: "#0c2340", size: 0.8, materialType: 'rough' as const },
 
-  // Hat brim - curved baseball cap style
-  { pos: [0, 2.35, -0.5] as [number, number, number], color: "#0c2340", size: 0.8 }, // Brim front
-  { pos: [-0.4, 2.35, -0.3] as [number, number, number], color: "#0c2340", size: 0.4 }, // Brim left
-  { pos: [0.4, 2.35, -0.3] as [number, number, number], color: "#0c2340", size: 0.4 }, // Brim right
-  { pos: [-0.2, 2.35, -0.4] as [number, number, number], color: "#0c2340", size: 0.3 }, // Brim curve left
-  { pos: [0.2, 2.35, -0.4] as [number, number, number], color: "#0c2340", size: 0.3 }, // Brim curve right
+  // Hat brim - rough fabric
+  { pos: [0, 2.35, -0.4] as [number, number, number], color: "#0c2340", size: 0.9, materialType: 'rough' as const },
+  { pos: [-0.3, 2.35, -0.2] as [number, number, number], color: "#0c2340", size: 0.4, materialType: 'rough' as const },
+  { pos: [0.3, 2.35, -0.2] as [number, number, number], color: "#0c2340", size: 0.4, materialType: 'rough' as const },
 
-  // Yankees "NY" Logo - more detailed and authentic
-  // N - vertical line
-  { pos: [-0.25, 2.48, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [-0.25, 2.43, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [-0.25, 2.38, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  // N - diagonal
-  { pos: [-0.2, 2.48, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [-0.15, 2.43, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [-0.1, 2.38, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  // N - right vertical
-  { pos: [-0.05, 2.48, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [-0.05, 2.43, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [-0.05, 2.38, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
+  // Yankees "NY" Logo - plastic lettering
+  // N shape (3 voxels)
+  { pos: [-0.15, 2.45, 0.35] as [number, number, number], color: "#ffffff", size: 0.08, materialType: 'plastic' as const },
+  { pos: [-0.15, 2.4, 0.35] as [number, number, number], color: "#ffffff", size: 0.08, materialType: 'plastic' as const },
+  { pos: [-0.05, 2.45, 0.35] as [number, number, number], color: "#ffffff", size: 0.08, materialType: 'plastic' as const },
 
-  // Y - left diagonal
-  { pos: [0.05, 2.48, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [0.1, 2.43, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  // Y - right diagonal
-  { pos: [0.15, 2.48, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [0.2, 2.43, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  // Y - stem
-  { pos: [0.125, 2.38, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
-  { pos: [0.125, 2.33, 0.35] as [number, number, number], color: "#ffffff", size: 0.05 },
+  // Y shape (3 voxels)
+  { pos: [0.05, 2.45, 0.35] as [number, number, number], color: "#ffffff", size: 0.08, materialType: 'plastic' as const },
+  { pos: [0.15, 2.45, 0.35] as [number, number, number], color: "#ffffff", size: 0.08, materialType: 'plastic' as const },
+  { pos: [0.1, 2.4, 0.35] as [number, number, number], color: "#ffffff", size: 0.08, materialType: 'plastic' as const },
 
-  // Hat button/size tag (authentic baseball cap detail)
-  { pos: [0.3, 2.45, 0.2] as [number, number, number], color: "#2c3e50", size: 0.08 },
+  // Arms (skin tone)
+  { pos: [-0.6, 1.0, 0] as [number, number, number], color: "#fdbcb4", size: 0.4, materialType: 'standard' as const },
+  { pos: [0.6, 1.0, 0] as [number, number, number], color: "#fdbcb4", size: 0.4, materialType: 'standard' as const },
 
-  // Arms (simple)
-  { pos: [-0.6, 1.0, 0] as [number, number, number], color: "#fdbcb4", size: 0.4 },
-  { pos: [0.6, 1.0, 0] as [number, number, number], color: "#fdbcb4", size: 0.4 },
+  // Legs (jeans) - rough fabric
+  { pos: [-0.3, -0.2, 0] as [number, number, number], color: "#1a365d", size: 0.5, materialType: 'rough' as const },
+  { pos: [0.3, -0.2, 0] as [number, number, number], color: "#1a365d", size: 0.5, materialType: 'rough' as const },
 
-  // Legs (jeans)
-  { pos: [-0.3, -0.2, 0] as [number, number, number], color: "#1a365d", size: 0.5 },
-  { pos: [0.3, -0.2, 0] as [number, number, number], color: "#1a365d", size: 0.5 },
-
-  // Shoes (white sneakers)
-  { pos: [-0.3, -0.7, 0] as [number, number, number], color: "#ffffff", size: 0.4 },
-  { pos: [0.3, -0.7, 0] as [number, number, number], color: "#ffffff", size: 0.4 },
+  // Shoes - plastic/rubber
+  { pos: [-0.3, -0.7, 0] as [number, number, number], color: "#ffffff", size: 0.4, materialType: 'plastic' as const },
+  { pos: [0.3, -0.7, 0] as [number, number, number], color: "#ffffff", size: 0.4, materialType: 'plastic' as const },
 ];
 
 export function Character() {
@@ -87,62 +67,130 @@ export function Character() {
 
   const characterBody = useMemo(() => createCharacterBody(), []);
 
-  // Spring-based smooth position and rotation
-  const { position, rotation } = useSpring({
-    position: [character.position.x, character.position.y, character.position.z],
-    rotation: [0, character.rotation, 0],
-    config: {
-      mass: 1,
-      tension: 120,
-      friction: 14,
-      clamp: false
-    }
-  });
+  // Debug: Log character position
+  useEffect(() => {
+    console.log('Character position:', character.position);
+    console.log('Character isMoving:', character.isMoving);
+  }, [character.position, character.isMoving]);
 
-  useFrame((_state, delta) => {
+  useFrame((state, delta) => {
     if (!groupRef.current) return;
 
     // Spring handles position and rotation smoothly now
 
-    // Simple walking animation
+    // Enhanced walking animation
     if (character.isMoving) {
-      walkCycle.current += delta * 8;
+      walkCycle.current += delta * 10;
 
-      // Body bobbing - use the spring position as base
+      // Dynamic body bobbing with multiple harmonics
       if (groupRef.current) {
-        const bobAmount = Math.sin(walkCycle.current) * 0.06;
-        groupRef.current.position.y = character.position.y + bobAmount;
+        const primaryBob = Math.sin(walkCycle.current) * 0.08;
+        const secondaryBob = Math.sin(walkCycle.current * 2) * 0.02;
+        const totalBob = primaryBob + secondaryBob;
+        groupRef.current.position.y = character.position.y + totalBob;
       }
 
-      // Subtle head bobbing
+      // Advanced head bobbing with slight tilt
       if (headRef.current) {
-        headRef.current.position.y = 2.0 + Math.sin(walkCycle.current * 2) * 0.02;
+        headRef.current.position.y = 2.0 + Math.sin(walkCycle.current * 2) * 0.03;
+        headRef.current.rotation.x = Math.sin(walkCycle.current * 1.5) * 0.02; // Forward/back tilt
+        headRef.current.rotation.z = Math.sin(walkCycle.current * 2.5) * 0.01; // Side to side tilt
       }
+
+      // Arm swing animation
+      // Left arm (opposite phase from right leg)
+      // Right arm (opposite phase from left leg)
+      // We'll use rotation for arm swing
     } else {
       walkCycle.current = 0;
 
-      // Idle animations
-      idleCycle.current += delta * 2;
+      // Enhanced idle animations
+      idleCycle.current += delta * 1.5;
 
-      // Gentle breathing
+      // Sophisticated breathing with inhale/exhale phases
       if (groupRef.current) {
-        const breatheAmount = Math.sin(idleCycle.current) * 0.01;
+        const breathePhase = Math.sin(idleCycle.current);
+        const breatheAmount = (breathePhase > 0 ? breathePhase * 0.015 : breathePhase * 0.008);
         groupRef.current.scale.y = 1 + breatheAmount;
+        groupRef.current.scale.x = 1 + breatheAmount * 0.3; // Subtle width change
       }
 
-      // Subtle head movement
+      // More complex head movement with personality
       if (headRef.current) {
-        headRef.current.rotation.y = Math.sin(idleCycle.current * 0.5) * 0.05;
-        headRef.current.position.y = 2.0 + Math.sin(idleCycle.current * 1.5) * 0.01;
+        // Looking around occasionally
+        const lookCycle = Math.sin(idleCycle.current * 0.3);
+        headRef.current.rotation.y = lookCycle * 0.08;
+
+        // Natural head position variation
+        headRef.current.position.y = 2.0 + Math.sin(idleCycle.current * 1.2) * 0.015;
+
+        // Occasional blinks (simulated by scale change)
+        const blinkPhase = Math.sin(idleCycle.current * 0.5);
+        if (blinkPhase > 0.95) {
+          // Simulate blink by temporarily hiding eyes
+        }
       }
+
+      // Subtle body sway
+      if (groupRef.current) {
+        const swayAmount = Math.sin(idleCycle.current * 0.8) * 0.005;
+        groupRef.current.rotation.z = swayAmount;
+      }
+    }
+
+    // Environmental interaction - character responds to weather/time
+    const time = state.clock.getElapsedTime();
+    if (groupRef.current && !character.isMoving) {
+      // Occasional random movements (looking around, adjusting stance)
+      const randomMovement = Math.sin(time * 0.5 + Math.PI) * 0.002;
+      groupRef.current.position.x += randomMovement * delta;
+      groupRef.current.position.z += randomMovement * delta;
     }
   });
 
+  // Use direct position instead of spring for now to debug
+  const charPos = [character.position.x, character.position.y, character.position.z] as [number, number, number];
+  
   return (
-    <animated.group ref={groupRef} position={position.to((x, y, z) => [x, y, z])} rotation-y={rotation}>
+    <group ref={groupRef} position={charPos} rotation-y={character.rotation} scale={1.2}>
+      {/* Helper light to make character more visible */}
+      <pointLight position={[0, 2, 0]} intensity={1.2} distance={8} color="#ffffff" />
+      
+      {/* Debug: Large bright red box to verify character position is visible */}
+      <mesh position={[0, 1, 0]}>
+        <boxGeometry args={[2, 2, 2]} />
+        <meshStandardMaterial color="#ff0000" emissive="#ff0000" emissiveIntensity={1.0} />
+      </mesh>
+      
+      {/* Debug: Large bright green box at origin */}
+      <mesh position={[0, 0, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="#00ff00" emissive="#00ff00" emissiveIntensity={1.0} />
+      </mesh>
+      
+      {/* Name label above character */}
+      <Text
+        position={[0, 3.5, 0]}
+        fontSize={0.4}
+        color="#4a90e2"
+        anchorX="center"
+        anchorY="middle"
+        outlineWidth={0.08}
+        outlineColor="#000000"
+      >
+        Jae
+      </Text>
+      
       {/* Render character body voxels */}
       {characterBody.map((voxel, index) => (
-        <Voxel key={index} position={voxel.pos} color={voxel.color} size={voxel.size} />
+        <Voxel
+          key={index}
+          position={voxel.pos}
+          color={voxel.color}
+          size={voxel.size}
+          materialType={voxel.materialType}
+          emissiveIntensity={voxel.emissiveIntensity}
+        />
       ))}
 
       {/* Dynamic shadow blob that responds to movement */}
@@ -175,7 +223,6 @@ export function Character() {
           side={BackSide}
         />
       </mesh>
-    </animated.group>
+    </group>
   );
 }
-

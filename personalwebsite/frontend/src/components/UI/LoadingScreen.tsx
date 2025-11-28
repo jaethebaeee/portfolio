@@ -26,19 +26,24 @@ interface PerformanceConfig {
 interface LoadingScreenProps {
   onSkip?: () => void;
   progressOverride?: number;
+  forceVisible?: boolean;
 }
 
-export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) {
-  const { progress: realProgress, loaded, total, errors } = useProgress();
+export function LoadingScreen({ onSkip, progressOverride, forceVisible: _forceVisible }: LoadingScreenProps) {
+  const { progress: realProgress, loaded: realLoaded, total: realTotal, errors } = useProgress();
   const progress = progressOverride ?? realProgress;
+
+  // Use overridden values for simulated loading, fallback to real values
+  const loaded = progressOverride !== undefined ? Math.floor((progress / 100) * 100) : realLoaded;
+  const total = progressOverride !== undefined ? 100 : realTotal;
   const [isLoading, setIsLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const [loadingSteps, setLoadingSteps] = useState<LoadingStep[]>([
-    { name: "Initializing 3D World", weight: 15, completed: false },
-    { name: "Loading Character Model", weight: 20, completed: false },
-    { name: "Building Zones", weight: 25, completed: false },
-    { name: "Setting up Lighting", weight: 20, completed: false },
-    { name: "Connecting to Chat", weight: 20, completed: false }
+    { name: "Building Jae's Digital Realm", weight: 20, completed: false },
+    { name: "Crafting Voxel Terrain", weight: 15, completed: false },
+    { name: "Lighting up the Scene", weight: 20, completed: false },
+    { name: "Spawning Portfolio Zones", weight: 25, completed: false },
+    { name: "Calibrating Camera Magic", weight: 20, completed: false }
   ]);
 
   const [metrics, setMetrics] = useState<LoadingMetrics>({
@@ -185,13 +190,13 @@ export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) 
 
   // Hide loading screen when actually complete
   useEffect(() => {
-    if (progress >= 100 && !errors.length) {
+    if (progress >= 100 && !errors.length && !_forceVisible) {
       // Minimum loading time for UX (1 second), but can be skipped by user
       const minLoadingTime = Math.max(1000 - (Date.now() - metrics.startTime), 0);
       const timer = setTimeout(() => setIsLoading(false), minLoadingTime);
       return () => clearTimeout(timer);
     }
-  }, [progress, errors, metrics.startTime]);
+  }, [progress, errors, metrics.startTime, _forceVisible]);
 
   // Calculate real progress with better weighting and smoothing
   const completedWeight = loadingSteps.reduce((acc, step) => {
@@ -214,7 +219,7 @@ export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) 
 
   return (
     <AnimatePresence>
-      {isLoading && (
+      {(isLoading || _forceVisible) && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -283,11 +288,21 @@ export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) 
             >
               <motion.span
                 animate={{
-                  color: ['#ffffff', '#00ffff', '#ffffff']
+                  color: ['#ffffff', '#00ffff', '#ff6b6b', '#4ecdc4', '#ffffff'],
+                  textShadow: [
+                    '0 0 10px rgba(255,255,255,0.5)',
+                    '0 0 20px rgba(0,255,255,0.8)',
+                    '0 0 20px rgba(255,107,107,0.8)',
+                    '0 0 20px rgba(78,205,196,0.8)',
+                    '0 0 10px rgba(255,255,255,0.5)'
+                  ]
                 }}
-                transition={{ duration: 4, repeat: Infinity }}
+                transition={{
+                  color: { duration: 3, repeat: Infinity },
+                  textShadow: { duration: 3, repeat: Infinity }
+                }}
               >
-                LOADING
+                LOADING JAE'S WORLD
               </motion.span>
               <motion.span
                 animate={{
@@ -416,9 +431,17 @@ export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) 
             </motion.div>
 
             <div className="flex justify-between items-center mb-6">
-              <p className="pixel-font text-white text-lg">{Math.round(displayProgress)}%</p>
+              <div className="text-center">
+                <p className="pixel-font text-white text-lg font-bold">{Math.round(displayProgress)}%</p>
+                <p className="pixel-font text-cyan-400 text-xs mt-1">
+                  {displayProgress < 25 ? "Starting the journey..." :
+                   displayProgress < 50 ? "Building the foundation..." :
+                   displayProgress < 75 ? "Adding the magic..." :
+                   displayProgress < 100 ? "Almost ready!" : "Welcome to Jae's World! ✨"}
+                </p>
+              </div>
               <p className="pixel-font text-gray-300 text-sm">
-                {loaded}/{total} assets
+                {loaded}/{total} assets loaded
               </p>
             </div>
 
@@ -434,7 +457,7 @@ export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) 
                 }}
                 className="w-full mb-4 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 pixel-border text-black pixel-font text-sm transition-colors"
               >
-                Skip Loading ⚡
+                Skip Ahead 🚀
               </motion.button>
             )}
 
@@ -602,9 +625,9 @@ export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) 
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-6 p-4 bg-red-600 pixel-panel"
               >
-                <p className="pixel-font text-white text-sm mb-2">⚠️ Loading Issues Detected</p>
+                <p className="pixel-font text-white text-sm mb-2">⚠️ Oops! Loading Glitch</p>
                 <p className="pixel-font text-gray-200 text-xs">
-                  Some assets failed to load. The experience may be limited.
+                  Some parts of Jae's world couldn't load. The experience might feel a bit different, but the magic is still there! ✨
                 </p>
               </motion.div>
             )}
@@ -648,7 +671,7 @@ export function LoadingScreen({ onSkip, progressOverride }: LoadingScreenProps) 
                 }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                💡 Tip: Use WASD to move around and E to interact with zones!
+                💡 Pro Tip: Drag to explore, scroll to zoom, right-click to pan around Jae's digital universe! 🚀
               </motion.p>
 
               {/* Pulsing icon */}

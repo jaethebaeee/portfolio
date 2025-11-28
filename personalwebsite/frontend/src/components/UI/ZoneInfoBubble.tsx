@@ -66,15 +66,37 @@ const ZONE_INFO: Record<Exclude<ZoneType, null>, ZoneInfo> = {
       "Connect on professional networks"
     ]
   },
-  chat: {
-    title: "AI Chat Zone",
-    description: "Have a conversation with Jae's AI assistant to learn more about his work and experience.",
-    icon: "🤖",
-    color: "#34d399",
+  games: {
+    title: "Games Zone",
+    description: "Explore fun arcade-style games built with voxels in Jae's gaming area.",
+    icon: "🎮",
+    color: "#ff6b6b",
     tips: [
-      "Ask questions about Jae's background",
-      "Get detailed project information",
-      "Interactive AI-powered conversations"
+      "Play classic arcade games",
+      "Experience voxel-based gaming",
+      "Test your reflexes and skills"
+    ]
+  },
+  chat: {
+    title: "AI Chat Assistant",
+    description: "Ask questions about Jae's work, background, or projects.",
+    icon: "🤖",
+    color: "#4ecdc4",
+    tips: [
+      "Press C to open the chat anywhere",
+      "Ask about specific projects or experiences",
+      "Use it as a guide to explore the world"
+    ]
+  },
+  pet: {
+    title: "Pet Zone",
+    description: "Meet Jae's virtual pet companion in this interactive area.",
+    icon: "🐕",
+    color: "#ffd93d",
+    tips: [
+      "Interact with the virtual pet",
+      "Learn about Jae's interests",
+      "Experience playful interactions"
     ]
   }
 };
@@ -88,7 +110,9 @@ export function ZoneInfoBubble() {
     projects: false,
     skills: false,
     contact: false,
-    chat: false
+    chat: false,
+    games: false,
+    pet: false
   });
 
   useEffect(() => {

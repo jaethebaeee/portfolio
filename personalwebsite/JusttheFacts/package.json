@@ -1,0 +1,18 @@
+{
+  "name": "fake-or-real-news-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension for Jae's portfolio facts",
+  "main": "popup.js",
+  "scripts": {
+    "build": "echo 'No build step required for Chrome extension'",
+    "lint": "echo 'Add linting if needed'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "portfolio",
+    "facts",
+    "jae"
+  ],
+  "author": "Jae",
+  "license": "MIT"
+}

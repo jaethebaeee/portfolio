@@ -6,9 +6,14 @@ import { Projects } from './Projects';
 import { Skills } from './Skills';
 import { Contact } from './Contact';
 import { Footer } from './Footer';
-import { ChatWidget } from './ChatWidget';
+import { VintageNavigationButtons } from './UI/VintageNavButton';
 
-export function TraditionalWebsite() {
+interface TraditionalWebsiteProps {
+  onBack?: () => void;
+  onForward?: () => void;
+}
+
+export function TraditionalWebsite({ onBack, onForward }: TraditionalWebsiteProps = {}) {
   const [currentSection, setCurrentSection] = useState('hero');
 
   const scrollToSection = (sectionId: string) => {
@@ -20,8 +25,12 @@ export function TraditionalWebsite() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <Header onNavigate={scrollToSection} currentSection={currentSection} />
+    <div className="h-screen text-white overflow-y-auto">
+      <Header
+        onNavigate={scrollToSection}
+        currentSection={currentSection}
+        onLaunchPortfolio={onForward}
+      />
 
       <main>
         <section id="hero">
@@ -47,7 +56,14 @@ export function TraditionalWebsite() {
 
       <Footer />
 
-      <ChatWidget />
+      {/* Vintage Navigation Buttons */}
+      <VintageNavigationButtons
+        onBack={onBack}
+        onForward={onForward}
+        canGoBack={!!onBack}
+        canGoForward={!!onForward}
+        delay={1.2}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Text, Html } from '@react-three/drei';
 import * as THREE from 'three';
+import { use3DStore, ZoneType } from '@/stores/use3DStore';
 
 interface NavigationOrbProps {
   position: [number, number, number];
@@ -9,13 +10,16 @@ interface NavigationOrbProps {
   icon: string;
   color: string;
   description: string;
+  zoneId?: string;
+  cameraTarget?: [number, number, number];
   onClick?: () => void;
 }
 
-function NavigationOrb({ position, zoneName, icon, color, description, onClick }: NavigationOrbProps) {
+function NavigationOrb({ position, zoneName, icon, color, description, onClick, zoneId, cameraTarget }: NavigationOrbProps & { zoneId?: string, cameraTarget?: [number, number, number] }) {
   const orbRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const { startZoneTransition, transition, currentZone } = use3DStore();
 
   useFrame((state) => {
     if (orbRef.current) {
@@ -27,23 +31,38 @@ function NavigationOrb({ position, zoneName, icon, color, description, onClick }
       // Gentle rotation
       orbRef.current.rotation.y = Math.sin(time * 0.8) * 0.2;
 
-      // Pulse effect when hovered
-      if (hovered) {
-        orbRef.current.scale.setScalar(1 + Math.sin(time * 6) * 0.1);
-      } else {
-        orbRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
-      }
+      // Pulse effect when hovered or during transition to this zone
+      const isTransitionTarget = transition.toZone === zoneId && transition.state !== 'idle';
+      const pulseIntensity = hovered || isTransitionTarget ? 0.15 : 0.05;
+      orbRef.current.scale.setScalar(1 + Math.sin(time * 6) * pulseIntensity);
 
       // Click feedback
       if (clicked) {
         orbRef.current.scale.setScalar(0.9);
         setTimeout(() => setClicked(false), 100);
       }
+
+      // Highlight current zone
+      if (currentZone === zoneId && transition.state === 'idle') {
+        orbRef.current.scale.setScalar(1.1);
+      }
     }
   });
 
   const handleClick = () => {
+    if (transition.state !== 'idle') return; // Prevent clicks during transitions
+
     setClicked(true);
+
+    if (zoneId && cameraTarget && currentZone !== zoneId) {
+      // Start the zone transition
+      startZoneTransition(
+        currentZone,
+        zoneId as any,
+        new THREE.Vector3(...cameraTarget)
+      );
+    }
+
     onClick?.();
   };
 
@@ -167,8 +186,8 @@ function NavigationOrb({ position, zoneName, icon, color, description, onClick }
 }
 
 interface ZoneNavigationProps {
-  currentZone?: string;
-  onZoneChange?: (_zoneId: string) => void;
+  currentZone?: ZoneType;
+  onZoneChange?: (_zoneId: ZoneType) => void;
 }
 
 export function ZoneNavigation({ currentZone, onZoneChange }: ZoneNavigationProps) {
@@ -182,6 +201,7 @@ export function ZoneNavigation({ currentZone, onZoneChange }: ZoneNavigationProp
       icon: '👤',
       color: '#ff1493',
       position: [-15, 8, -15] as [number, number, number],
+      cameraTarget: [0, 0, -10] as [number, number, number],
       description: 'Learn about Jae\'s background, experience, and journey in AI research.'
     },
     {
@@ -190,6 +210,7 @@ export function ZoneNavigation({ currentZone, onZoneChange }: ZoneNavigationProp
       icon: '🎓',
       color: '#B31B1B',
       position: [15, 8, -15] as [number, number, number],
+      cameraTarget: [10, 0, -10] as [number, number, number],
       description: 'Explore Jae\'s academic journey from Seoul National to Cornell University.'
     },
     {
@@ -198,6 +219,7 @@ export function ZoneNavigation({ currentZone, onZoneChange }: ZoneNavigationProp
       icon: '⚡',
       color: '#a78bfa',
       position: [15, 8, 0] as [number, number, number],
+      cameraTarget: [10, 0, 0] as [number, number, number],
       description: 'Discover Jae\'s technical expertise in AI/ML, healthcare, and full-stack development.'
     },
     {
@@ -206,6 +228,7 @@ export function ZoneNavigation({ currentZone, onZoneChange }: ZoneNavigationProp
       icon: '🚀',
       color: '#4ecdc4',
       position: [-15, 8, 0] as [number, number, number],
+      cameraTarget: [-10, 0, 0] as [number, number, number],
       description: 'Browse Jae\'s innovative projects in healthcare AI, ML research, and web development.'
     },
     {
@@ -214,15 +237,35 @@ export function ZoneNavigation({ currentZone, onZoneChange }: ZoneNavigationProp
       icon: '📡',
       color: '#4ecdc4',
       position: [-15, 8, 15] as [number, number, number],
+      cameraTarget: [-10, 0, 10] as [number, number, number],
       description: 'Get in touch with Jae for collaborations, opportunities, and professional discussions.'
     },
     {
-      id: 'ai-chat',
+      id: 'games',
+      name: 'Games',
+      icon: '🎮',
+      color: '#ff6b6b',
+      position: [0, 8, 15] as [number, number, number],
+      cameraTarget: [0, 0, 15] as [number, number, number],
+      description: 'Explore Jae\'s game development projects and interactive experiences.'
+    },
+    {
+      id: 'chat',
       name: 'AI Chat',
       icon: '🤖',
       color: '#4ecdc4',
+      position: [0, 8, -15] as [number, number, number],
+      cameraTarget: [0, 0, -15] as [number, number, number],
+      description: 'Talk with the AI assistant about Jae\'s work and background.'
+    },
+    {
+      id: 'pet',
+      name: 'Pet Zone',
+      icon: '🐕',
+      color: '#8B4513',
       position: [15, 8, 15] as [number, number, number],
-      description: 'Interact with Jae\'s AI assistant to learn more about his expertise and research.'
+      cameraTarget: [15, 0, 15] as [number, number, number],
+      description: 'Meet Jae\'s loyal digital companion and enjoy some relaxing interaction.'
     }
   ];
 
@@ -284,7 +327,9 @@ export function ZoneNavigation({ currentZone, onZoneChange }: ZoneNavigationProp
           icon={zone.icon}
           color={zone.color}
           description={zone.description}
-          onClick={() => onZoneChange?.(zone.id)}
+          zoneId={zone.id}
+          cameraTarget={zone.cameraTarget}
+          onClick={() => onZoneChange?.(zone.id as ZoneType)}
         />
       ))}
 

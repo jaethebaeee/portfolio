@@ -2,9 +2,10 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import { use3DStore, ZoneType } from '@/stores/use3DStore';
-import { clampToWorldBounds, isPointInZone, Zone } from '@/utils/collision';
 import { useGameStore } from '@/stores/useGameStore';
+import { clampToWorldBounds, isPointInZone, Zone } from '@/utils/collision';
 import { soundManager } from '@/utils/soundManager';
+import useStore from '@/stores/useStore';
 
 interface KeyState {
   forward: boolean;
@@ -34,7 +35,9 @@ const ZONES: (Zone & { type: ZoneType })[] = [
   { name: 'Projects', type: 'projects', position: new Vector3(-15, 0.5, 0), size: new Vector3(8, 2, 8) },
   { name: 'Skills', type: 'skills', position: new Vector3(15, 0.5, 0), size: new Vector3(8, 2, 8) },
   { name: 'Contact', type: 'contact', position: new Vector3(-15, 0.5, 15), size: new Vector3(8, 2, 8) },
-  { name: 'AI Chat', type: 'chat', position: new Vector3(15, 0.5, 15), size: new Vector3(8, 2, 8) },
+  { name: 'Games', type: 'games', position: new Vector3(0, 0.5, 15), size: new Vector3(8, 2, 8) },
+  { name: 'Pet Zone', type: 'pet', position: new Vector3(15, 0.5, 15), size: new Vector3(8, 2, 8) },
+  { name: 'AI Chat', type: 'chat', position: new Vector3(0, 0.5, -15), size: new Vector3(8, 2, 8) },
 ];
 
 export function useCharacterController() {
@@ -72,16 +75,14 @@ export function useCharacterController() {
   } = use3DStore();
 
   const {
-    addXP,
     hasVisited,
     markZoneVisited,
-    updateChallengeProgress,
-    completeChallenge,
-    incrementZoneVisit,
-    dailyChallenges
   } = useGameStore();
+  const { setChatOpen } = useStore();
 
   // Accessibility: Announce zone changes and interactions
+  const mountedRef = useRef(true);
+
   const announceToScreenReader = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
     const announcement = document.createElement('div');
     announcement.setAttribute('aria-live', priority);
@@ -89,16 +90,27 @@ export function useCharacterController() {
     announcement.setAttribute('class', 'sr-only');
     announcement.textContent = message;
 
-    document.body.appendChild(announcement);
+    // Only add if component is still mounted
+    if (mountedRef.current && document.body) {
+      document.body.appendChild(announcement);
 
-    // Remove after announcement - use a safer cleanup approach
-    const cleanup = () => {
-      if (document.body.contains(announcement)) {
-        document.body.removeChild(announcement);
-      }
+      // Remove after announcement - use a safer cleanup approach
+      const cleanup = () => {
+        if (mountedRef.current && document.body.contains(announcement)) {
+          document.body.removeChild(announcement);
+        }
+      };
+
+      setTimeout(cleanup, 1000);
+    }
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
     };
-
-    setTimeout(cleanup, 1000);
   }, []);
 
   // Keyboard event handlers
@@ -191,30 +203,6 @@ export function useCharacterController() {
     }
   }, []);
 
-  // Track zone visits for daily challenges
-  useEffect(() => {
-    if (currentZone) {
-      // Update visit challenge progress when entering a zone
-      const visitChallenge = dailyChallenges.find(c => c.type === 'visit');
-      if (visitChallenge) {
-        // Only count unique zone visits per day - use localStorage to track
-        const todayKey = `zoneVisits_${new Date().toDateString()}`;
-        const visitedZonesToday = new Set(
-          JSON.parse(localStorage.getItem(todayKey) || '[]')
-        );
-
-        if (!visitedZonesToday.has(currentZone)) {
-          visitedZonesToday.add(currentZone);
-          localStorage.setItem(todayKey, JSON.stringify([...visitedZonesToday]));
-
-          updateChallengeProgress(visitChallenge.id);
-          if (visitChallenge.current + 1 >= visitChallenge.target) {
-            setTimeout(() => completeChallenge(visitChallenge.id), 100);
-          }
-        }
-      }
-    }
-  }, [currentZone, dailyChallenges, updateChallengeProgress, completeChallenge]);
 
   // Set up keyboard listeners
   useEffect(() => {
@@ -313,32 +301,22 @@ export function useCharacterController() {
         setCurrentZone(zone.type);
         setCanInteract(true);
 
-        // Award XP on first visit to a zone
+        // Mark zone as visited on first visit
         if (zone.type && !hasVisited(zone.type)) {
-          addXP(50); // first-visit reward
           markZoneVisited(zone.type);
-          announceToScreenReader(`First time visiting ${zone.name}! Earned 50 XP.`, 'polite');
+          announceToScreenReader(`First time visiting ${zone.name}.`, 'polite');
         }
 
-        // Track zone visits for challenges
-        if (zone.type) {
-          incrementZoneVisit(zone.type);
-        }
-
-          // Handle interaction
+        // Handle interaction
         if (keys.interact && !activeOverlay) {
-          setActiveOverlay(zone.type);
-          soundManager.playInteraction(0.3); // Play interaction sound
-          announceToScreenReader(`Opened ${zone.name} information panel. Press Escape to close.`, 'assertive');
-
-          // Update interaction challenge progress
-          const interactChallenge = dailyChallenges.find(c => c.type === 'interact');
-          if (interactChallenge) {
-            updateChallengeProgress(interactChallenge.id);
-            if (interactChallenge.current + 1 >= interactChallenge.target) {
-              setTimeout(() => completeChallenge(interactChallenge.id), 100);
-            }
+          if (zone.type === 'chat') {
+            setChatOpen(true);
+            announceToScreenReader('Opening AI chat assistant.', 'assertive');
+          } else {
+            setActiveOverlay(zone.type);
+            announceToScreenReader(`Opened ${zone.name} information panel. Press Escape to close.`, 'assertive');
           }
+          soundManager.playInteraction(0.3); // Play interaction sound
 
           keysPressed.current.interact = false; // Prevent repeated triggers
         }

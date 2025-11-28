@@ -1,34 +1,24 @@
 export const aboutContent = {
   title: "About Jae Kim",
   subtitle: "AI Engineer • Healthcare ML",
-  content: `Hi! I'm Jae Kim, an AI Engineer focused on healthcare ML. I've deployed AI solutions that improve patient outcomes by 25%+ and reduce healthcare costs.
+  content: `Hi! I'm Jae Kim, an AI Engineer building healthcare ML solutions. Cornell BA/MS '25 with 2 publications, specializing in clinical AI and NLP.
 
-As a Cornell BA/MS '25 student with 2 peer-reviewed publications, I specialize in clinical machine learning, natural language processing, and real-time biosensor systems. I build ML systems that healthcare providers actually use.
-
-Before this I was...
-🍎 building an agentic Siri planner powered by Apple Intelligence
-🎓 finishing my BS/MS at Penn
-🐣 being a kid and having fun (I still try to do this)`,
+I create ML systems that actually improve patient care and reduce healthcare costs.`,
   highlights: [
     {
       icon: "🎯",
-      title: "Impact Driven",
-      description: "25%+ improvement in patient outcomes through AI solutions"
+      title: "Impact Focused",
+      description: "25%+ better patient outcomes through AI"
     },
     {
       icon: "🎓",
-      title: "Academic Excellence",
-      description: "Finishing Cornell BA/MS '25 with 2 peer-reviewed publications"
+      title: "Published Researcher",
+      description: "2 peer-reviewed papers, Cornell BA/MS '25"
     },
     {
       icon: "🧠",
-      title: "AI Specialist",
-      description: "Clinical ML, NLP, and real-time biosensor systems"
-    },
-    {
-      icon: "🏥",
-      title: "Healthcare Focus",
-      description: "Bridging AI research with practical healthcare applications"
+      title: "Clinical AI Expert",
+      description: "ML, NLP, real-time health monitoring"
     }
   ],
   skills: [

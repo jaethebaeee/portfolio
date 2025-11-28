@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { use3DStore, ZoneType } from '@/stores/use3DStore';
 
@@ -45,11 +45,25 @@ const ZONE_TRANSITIONS: Record<Exclude<ZoneType, null>, {
     description: "Get in touch and start a conversation"
   },
   chat: {
-    title: "AI Chat Zone",
-    subtitle: "Interactive Assistant",
-    color: "#34d399",
+    title: "AI Chat Hub",
+    subtitle: "Ask Me Anything",
+    color: "#4ecdc4",
     icon: "🤖",
-    description: "Have a conversation with Jae's AI assistant"
+    description: "Meet the AI assistant that can answer questions about my work"
+  },
+  games: {
+    title: "Games Zone",
+    subtitle: "Arcade Gaming",
+    color: "#ff6b6b",
+    icon: "🎮",
+    description: "Experience voxel-based arcade games"
+  },
+  pet: {
+    title: "Pet Zone",
+    subtitle: "Virtual Companion",
+    color: "#ffd93d",
+    icon: "🐕",
+    description: "Meet Jae's virtual pet companion"
   }
 };
 
@@ -57,6 +71,17 @@ export function ZoneTransition() {
   const { currentZone } = use3DStore();
   const [showTransition, setShowTransition] = useState(false);
   const [currentTransitionData, setCurrentTransitionData] = useState<typeof ZONE_TRANSITIONS.about | null>(null);
+
+  const transitionParticles = useMemo(() => {
+    const width = typeof window === 'undefined' ? 1024 : window.innerWidth;
+    const height = typeof window === 'undefined' ? 768 : window.innerHeight;
+    return Array.from({ length: 20 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      delay: Math.random() * 2,
+      duration: 1.5 + Math.random() * 1.5,
+    }));
+  }, []);
 
   useEffect(() => {
     if (currentZone && ZONE_TRANSITIONS[currentZone]) {
@@ -196,24 +221,24 @@ export function ZoneTransition() {
           </motion.div>
 
           {/* Floating particles effect */}
-          {[...Array(20)].map((_, i) => (
+          {transitionParticles.map((particle, i) => (
             <motion.div
               key={i}
               initial={{
                 opacity: 0,
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
+                x: particle.x,
+                y: particle.y,
                 scale: 0
               }}
               animate={{
                 opacity: [0, 1, 0],
                 scale: [0, 1, 0],
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
+                x: particle.x + (Math.random() * 200 - 100),
+                y: particle.y + (Math.random() * 200 - 100),
               }}
               transition={{
-                delay: Math.random() * 2,
-                duration: 2,
+                delay: particle.delay,
+                duration: particle.duration,
                 ease: "easeOut"
               }}
               style={{

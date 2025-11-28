@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Play, Gamepad2, MessageSquare, Briefcase } from 'lucide-react';
+import { X, Gamepad2 } from 'lucide-react';
 
 interface WelcomeModalProps {
   isOpen: boolean;
@@ -8,47 +8,15 @@ interface WelcomeModalProps {
   isReturningVisitor?: boolean;
 }
 
-export function WelcomeModal({ isOpen, onClose, isReturningVisitor = false }: WelcomeModalProps) {
+export function WelcomeModal({ isOpen, onClose, isReturningVisitor: _isReturningVisitor = false }: WelcomeModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
 
-  const steps = isReturningVisitor ? [
+  const steps = [
     {
-      title: "Welcome Back!",
-      content: "Great to see you again! The portfolio has evolved with new gamification features. Check out your achievements and complete daily challenges for rewards!",
-      icon: <Gamepad2 className="w-12 h-12 text-green-400" />,
-      tips: ["Check achievements (press Tab)", "Complete daily challenges", "Explore new content"]
-    },
-    {
-      title: "New Features",
-      content: "We've added daily challenges, achievements, and dynamic collectibles that change every day. Your progress and streak are being tracked!",
-      icon: <Briefcase className="w-12 h-12 text-purple-400" />,
-      features: ["Daily rotating challenges", "Achievement system", "Visit streaks", "Dynamic collectibles"]
-    }
-  ] : [
-    {
-      title: "Welcome to Jae's Portfolio!",
-      content: "Explore this unique 3D voxel world where each zone tells a different part of my story. Use WASD or arrow keys to move around, and press E to interact with zones.",
-      icon: <Gamepad2 className="w-12 h-12 text-cyan-400" />,
-      tips: ["WASD/Arrows - Move", "E/Space - Interact", "ESC - Close menus"]
-    },
-    {
-      title: "Meet the Zones",
-      content: "Each colored structure represents a different area of expertise. Walk up to them and press E to learn more!",
-      icon: <Briefcase className="w-12 h-12 text-yellow-400" />,
-      zones: [
-        { name: "About", icon: "🏠", color: "Blue house - Learn about Jae" },
-        { name: "Education", icon: "📚", color: "Bookshelf - Academic background" },
-        { name: "Projects", icon: "💻", color: "Computer - Featured work" },
-        { name: "Skills", icon: "🔧", color: "Toolbox - Technical expertise" },
-        { name: "Contact", icon: "📮", color: "Mailbox - Get in touch" },
-        { name: "AI Chat", icon: "🤖", color: "Robot - Ask questions" }
-      ]
-    },
-    {
-      title: "AI Assistant Ready",
-      content: "The glowing robot in the AI Chat zone is powered by advanced RAG technology. Ask about Jae's experience, skills, or anything else!",
-      icon: <MessageSquare className="w-12 h-12 text-green-400" />,
-      features: ["Real-time conversations", "Knowledge about Jae", "Powered by AI & vector search"]
+      title: "Welcome to Jae's Portfolio",
+      content: "Hi! I'm Jae, a healthcare AI engineer. This is my digital space where you can explore my work, experience, and get to know me better.",
+      icon: <Gamepad2 className="w-12 h-12 text-blue-400" />,
+      tips: ["WASD - Move around", "E - Click on areas to learn more", "C - Chat with me"]
     }
   ];
 
@@ -114,25 +82,16 @@ export function WelcomeModal({ isOpen, onClose, isReturningVisitor = false }: We
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 pixel-button p-2 hover:bg-red-600 transition-colors"
+            className="absolute top-4 right-4 p-2 bg-amber-100 border border-amber-800 text-amber-900 hover:bg-amber-200 transition-colors rounded-sm pixel-font font-bold text-sm"
+            style={{
+              textShadow: '1px 1px 0px rgba(101, 67, 33, 0.2)',
+              boxShadow: '0 2px 4px rgba(139, 69, 19, 0.2)'
+            }}
             aria-label="Close welcome modal"
           >
             <X className="w-6 h-6" />
           </button>
 
-          {/* Progress indicator */}
-          <div className="flex justify-center mb-6">
-            <div className="flex gap-2">
-              {steps.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentStep ? 'bg-cyan-400' : 'bg-gray-600'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
 
           {/* Content */}
           <AnimatePresence mode="wait">
@@ -149,63 +108,35 @@ export function WelcomeModal({ isOpen, onClose, isReturningVisitor = false }: We
               </div>
 
               {/* Title */}
-              <h1 className="pixel-font text-2xl mb-4 text-yellow-400">
+              <h1 className="pixel-font text-2xl mb-4 text-yellow-400 font-bold uppercase tracking-wider"
+                  style={{
+                    textShadow: '2px 2px 0px rgba(0,0,0,0.5)',
+                    fontFamily: "'Courier New', 'Monaco', 'Menlo', monospace"
+                  }}>
                 {steps[currentStep].title}
               </h1>
 
               {/* Content */}
-              <p className="pixel-font text-sm leading-relaxed text-white mb-6 max-w-lg mx-auto">
+              <p className="pixel-font text-sm leading-relaxed text-gray-200 mb-6 max-w-lg mx-auto"
+                 style={{ fontFamily: "'Courier New', 'Monaco', 'Menlo', monospace" }}>
                 {steps[currentStep].content}
               </p>
 
-              {/* Zone grid for step 1 */}
-              {steps[currentStep].zones && (
-                <div className="grid grid-cols-2 gap-3 mb-6 max-w-md mx-auto">
-                  {steps[currentStep].zones.map((zone, index) => (
-                    <motion.div
-                      key={zone.name}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="pixel-panel p-3 bg-gray-800"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">{zone.icon}</span>
-                        <div className="text-left">
-                          <div className="pixel-font text-xs text-cyan-400 font-bold">{zone.name}</div>
-                          <div className="pixel-font text-xs text-gray-300">{zone.color}</div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-
-              {/* Features list for step 2 */}
-              {steps[currentStep].features && (
-                <div className="space-y-2 mb-6 max-w-md mx-auto">
-                  {steps[currentStep].features.map((feature, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-center gap-3 text-left"
-                    >
-                      <div className="w-2 h-2 bg-cyan-400 rounded-full flex-shrink-0" />
-                      <span className="pixel-font text-sm text-gray-200">{feature}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
 
               {/* Tips for step 0 */}
               {steps[currentStep].tips && (
-                <div className="pixel-panel p-4 bg-gray-800 mb-6 max-w-md mx-auto">
-                  <h3 className="pixel-font text-sm text-yellow-400 mb-2">Quick Tips:</h3>
+                <div className="pixel-panel border-yellow-400/30 bg-black/60 p-4 mb-6 max-w-md mx-auto backdrop-blur-sm">
+                  <h3 className="pixel-font text-sm text-yellow-400 mb-2 uppercase tracking-wider font-bold"
+                      style={{
+                        textShadow: '1px 1px 0px rgba(0,0,0,0.5)',
+                        fontFamily: "'Courier New', 'Monaco', 'Menlo', monospace"
+                      }}>
+                    Quick Tips:
+                  </h3>
                   <div className="space-y-1">
                     {steps[currentStep].tips.map((tip, index) => (
-                      <div key={index} className="pixel-font text-xs text-gray-300 text-left">
+                      <div key={index} className="pixel-font text-xs text-gray-200 text-left"
+                           style={{ fontFamily: "'Courier New', 'Monaco', 'Menlo', monospace" }}>
                         • {tip}
                       </div>
                     ))}
@@ -215,39 +146,25 @@ export function WelcomeModal({ isOpen, onClose, isReturningVisitor = false }: We
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation buttons */}
-          <div className="flex justify-between items-center mt-8">
-            <button
-              onClick={prevStep}
-              disabled={currentStep === 0}
-              className="pixel-button px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
-            >
-              <span className="pixel-font text-sm">Previous</span>
-            </button>
-
-            <div className="flex gap-2">
-              {steps.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentStep(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentStep ? 'bg-cyan-400' : 'bg-gray-600'
-                  }`}
-                  aria-label={`Go to step ${index + 1}`}
-                />
-              ))}
-            </div>
-
+          {/* Start button */}
+          <div className="mt-8">
             <motion.button
-              onClick={nextStep}
-              className="pixel-button px-6 py-3 bg-cyan-600 hover:bg-cyan-700 transition-colors flex items-center gap-2"
+              onClick={onClose}
+              className="px-6 py-3 bg-gradient-to-b from-amber-100 via-amber-50 to-yellow-100 border-2 border-amber-800 text-amber-900 font-bold text-sm uppercase tracking-wider shadow-lg rounded-sm pixel-font transition-all duration-200 hover:shadow-xl"
+              style={{
+                textShadow: '1px 1px 0px rgba(101, 67, 33, 0.3)',
+                boxShadow: `
+                  0 4px 8px rgba(139, 69, 19, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                  inset 0 -1px 0 rgba(139, 69, 19, 0.2)
+                `,
+                fontFamily: "'Courier New', 'Monaco', 'Menlo', monospace",
+                letterSpacing: '0.05em'
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="pixel-font text-sm">
-                {currentStep === steps.length - 1 ? 'Start Exploring!' : 'Next'}
-              </span>
-              <Play className="w-4 h-4" />
+              Start Exploring
             </motion.button>
           </div>
 

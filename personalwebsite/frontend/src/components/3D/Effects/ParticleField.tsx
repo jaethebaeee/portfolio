@@ -1,5 +1,5 @@
-import { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useMemo, useRef, useEffect } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 interface ParticleFieldProps {
@@ -13,6 +13,9 @@ interface ParticleFieldProps {
   trailLength?: number;
   gravity?: number;
   attraction?: [number, number, number];
+  interactive?: boolean;
+  mouseAttraction?: number;
+  mouseRepulsion?: number;
 }
 
 export function ParticleField({
@@ -25,9 +28,27 @@ export function ParticleField({
   physics = 'floating',
   trailLength = 0,
   gravity = 0,
-  attraction = [0, 0, 0]
+  attraction = [0, 0, 0],
+  interactive = true,
+  mouseAttraction = 2,
+  mouseRepulsion = 1
 }: ParticleFieldProps) {
   const meshRef = useRef<THREE.Points>(null);
+  const mouse = useRef({ x: 0, y: 0 });
+  const { viewport } = useThree();
+
+  // Mouse interaction setup
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    if (interactive) {
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => window.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, [interactive]);
 
   const particles = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -55,8 +76,33 @@ export function ParticleField({
     const time = state.clock.getElapsedTime();
     const deltaTime = state.clock.getDelta();
 
+    // Convert mouse position to 3D world space (approximate)
+    const mouse3D = new THREE.Vector3(mouse.current.x * viewport.width / 2, mouse.current.y * viewport.height / 2, 0);
+
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
+
+      // Mouse interaction
+      if (interactive) {
+        const particlePos = new THREE.Vector3(positions[i3], positions[i3 + 1], positions[i3 + 2]);
+        const distanceToMouse = particlePos.distanceTo(mouse3D);
+
+        if (distanceToMouse < mouseAttraction) {
+          // Attract particles to mouse
+          const direction = mouse3D.clone().sub(particlePos).normalize();
+          const force = (mouseAttraction - distanceToMouse) / mouseAttraction;
+          positions[i3] += direction.x * force * deltaTime * 2;
+          positions[i3 + 1] += direction.y * force * deltaTime * 2;
+          positions[i3 + 2] += direction.z * force * deltaTime * 2;
+        } else if (distanceToMouse < mouseRepulsion) {
+          // Repel particles from mouse when too close
+          const direction = particlePos.clone().sub(mouse3D).normalize();
+          const force = (mouseRepulsion - distanceToMouse) / mouseRepulsion;
+          positions[i3] += direction.x * force * deltaTime;
+          positions[i3 + 1] += direction.y * force * deltaTime;
+          positions[i3 + 2] += direction.z * force * deltaTime;
+        }
+      }
 
       switch (physics) {
         case 'floating':
@@ -136,5 +182,37 @@ export function ParticleField({
         blending={THREE.AdditiveBlending}
       />
     </points>
+  );
+}
+
+interface VolumetricLightProps {
+  position: [number, number, number];
+  color?: string;
+  intensity?: number;
+  radius?: number;
+}
+
+export function VolumetricLight({ position, color = '#ffffff', intensity = 0.5, radius = 5 }: VolumetricLightProps) {
+  const lightRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (lightRef.current) {
+      const time = state.clock.getElapsedTime();
+      // Gentle pulsing effect
+      const pulse = Math.sin(time * 2) * 0.1 + 0.9;
+      lightRef.current.scale.setScalar(pulse);
+    }
+  });
+
+  return (
+    <mesh ref={lightRef} position={position}>
+      <sphereGeometry args={[radius, 16, 16]} />
+      <meshBasicMaterial
+        color={color}
+        transparent
+        opacity={intensity * 0.3}
+        blending={THREE.AdditiveBlending}
+      />
+    </mesh>
   );
 }

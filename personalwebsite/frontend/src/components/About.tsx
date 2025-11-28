@@ -90,11 +90,11 @@ export function About() {
                 <div className="space-y-3 text-gray-300">
                   <p className="flex items-center gap-3">
                     <span className="text-2xl">🍎</span>
-                    <span>building an agentic Siri planner powered by Apple Intelligence</span>
+                    <span>BS/MS at Cornell</span>
                   </p>
                   <p className="flex items-center gap-3">
                     <span className="text-2xl">🎓</span>
-                    <span>finishing my BS/MS at Penn</span>
+                    <span>working at Kakao API Map</span>
                   </p>
                   <p className="flex items-center gap-3">
                     <span className="text-2xl">🐣</span>

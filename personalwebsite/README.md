@@ -1,20 +1,20 @@
-# 3D Voxel Personal Website 🎮
+# AI-Powered Portfolio with RAG 🤖
 
-An interactive 3D portfolio website with a retro voxel aesthetic and AI chat assistant. Navigate through a game-like world to explore different sections of the portfolio.
+An intelligent portfolio website featuring Retrieval-Augmented Generation (RAG) technology. Ask questions about projects, skills, and experience to explore the portfolio through natural conversation.
 
-![Built with React Three Fiber](https://img.shields.io/badge/React%20Three%20Fiber-3D-blue)
+![Built with React](https://img.shields.io/badge/React-18+-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.9+-blue)
-![Status](https://img.shields.io/badge/Status-Client--Side%20Only-success)
-![No Backend Required](https://img.shields.io/badge/Backend-No%20Server%20Needed-brightgreen)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--3.5-green)
+![RAG](https://img.shields.io/badge/RAG-Vector--Search-orange)
 
 ## 🌟 Features
 
-- **🎮 Interactive 3D World**: Navigate using WASD/Arrow keys through a voxel-based environment
-- **🏠 6 Themed Zones**: About, Education, Projects, Skills, Contact, and AI Chat
-- **🤖 AI Assistant**: Chat with an intelligent assistant that knows about the portfolio
-- **🎨 Retro Pixel Art**: Nostalgic gaming-inspired UI with pixel fonts and animations
-- **📱 Mobile Support**: Touch controls and responsive design
-- **⚡ Client-Side Only**: No backend required - runs entirely in the browser
+- **🤖 Intelligent RAG Assistant**: Ask questions about projects, technologies, and experience
+- **🔍 Smart Search**: Vector-based search through portfolio content
+- **💬 Natural Conversations**: Context-aware responses powered by AI
+- **📚 Rich Knowledge Base**: Indexed projects, technologies, and professional experience
+- **🎨 Modern UI**: Clean chat interface with dark theme
+- **⚡ Client-Side Search**: Instant responses with local vector search
 
 ## 🚀 Quick Start
 
@@ -22,32 +22,43 @@ An interactive 3D portfolio website with a retro voxel aesthetic and AI chat ass
 
 - Node.js 18.20.8+
 - npm 10.8.2+
+- OpenAI API Key (optional, for enhanced AI responses)
 
 ### Installation
 
 ```bash
 # 1. Clone the repository
 git clone <your-repo-url>
-cd personalwebsite
+cd personalwebsite/frontend
 
 # 2. Install dependencies
 npm install
 
-# 3. Start the application
+# 3. Set up OpenAI API key (optional but recommended)
+echo "VITE_OPENAI_API_KEY=your_openai_api_key_here" > .env.local
+
+# 4. Start the application
 npm run dev
 ```
 
-Visit `http://localhost:5173` to see your 3D portfolio!
+Visit `http://localhost:5173/portfolio` to interact with the RAG assistant!
 
-### Frontend-Only! 🎉
+### OpenAI Integration
 
-This application runs entirely in the browser with no server setup needed. Everything works client-side including the AI chat functionality!
+For the best experience, add your OpenAI API key:
+1. Get an API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Create a `.env.local` file in the `frontend` directory
+3. Add: `VITE_OPENAI_API_KEY=your_key_here`
+
+Without an API key, the system uses intelligent fallback responses based on keyword matching.
 
 ## 🎯 How to Use
 
-### Navigation
-- **WASD** or **Arrow Keys** - Move your character
-- **E** or **Space** - Interact with zones
+### RAG Assistant
+- **Ask Questions**: Type natural questions about projects, skills, or experience
+- **Get Smart Responses**: The assistant searches through portfolio content and provides relevant answers
+- **Follow-up Questions**: Use conversation context for deeper exploration
+- **Quick Suggestions**: Click suggested questions for common inquiries
 - **ESC** - Close overlays
 
 ### Zones
@@ -107,13 +118,12 @@ Update the AI's knowledge in:
 
 ### Tech Stack
 - **React** + **TypeScript** - UI framework
-- **React Three Fiber** - 3D rendering with Three.js
-- **@react-three/drei** - Helper components
-- **Zustand** - State management
+- **OpenAI GPT-3.5** - AI-powered responses
+- **Custom RAG System** - Vector search and retrieval
 - **Framer Motion** - Animations
 - **Tailwind CSS** - Styling
 - **Vite** - Build tool
-- **Client-side AI** - No backend required!
+- **Client-side RAG** - No backend required for core functionality!
 
 ## 📖 Documentation
 

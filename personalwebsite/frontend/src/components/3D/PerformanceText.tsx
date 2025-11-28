@@ -62,3 +62,5 @@ export const PerformanceText: React.FC<PerformanceTextProps> = ({
     </Text>
   );
 };
+
+
