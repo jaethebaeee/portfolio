@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
-import { ChevronDown, Github, Linkedin, Mail, Download } from 'lucide-react';
+import { ChevronDown, Linkedin, Mail, Download } from 'lucide-react';
 
 interface HeroProps {
   onNavigate: (_sectionId: string) => void;
@@ -224,17 +224,6 @@ export function Hero({ onNavigate }: HeroProps) {
             transition={{ delay: 1.2 }}
             className="flex flex-wrap justify-center gap-3 mt-8"
           >
-            <motion.a
-              href="https://github.com/jaekim"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 text-gray-300 hover:text-white rounded-lg transition-all duration-200 border border-gray-600/30 hover:border-gray-500/50"
-              whileHover={{ scale: 1.05, y: -1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Github className="w-4 h-4" />
-              <span className="hidden sm:inline">GitHub</span>
-            </motion.a>
 
             <motion.a
               href="mailto:jk2765@cornell.edu"
@@ -265,7 +254,6 @@ export function Hero({ onNavigate }: HeroProps) {
             className="flex justify-center space-x-6"
           >
             {[
-              { Icon: Github, href: 'https://github.com/jaekim', label: 'GitHub' },
               { Icon: Linkedin, href: 'https://linkedin.com/in/jaekim', label: 'LinkedIn' },
               { Icon: Mail, href: 'mailto:jk2765@cornell.edu', label: 'Email' },
               { Icon: Download, href: '#', label: 'Resume' },

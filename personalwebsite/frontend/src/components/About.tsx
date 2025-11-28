@@ -27,7 +27,7 @@ export function About() {
         >
           <div className="space-y-4">
             <p className="text-xl text-gray-300 leading-relaxed">
-              Hi! I'm <span className="text-cyan-400 font-semibold">Jae Kim</span>, an AI Engineer currently at MSKCC
+              Hi! I'm <span className="text-cyan-400 font-semibold">Jae Kim</span>, an AI Engineer formerly at MSKCC
               working on healthcare ML solutions. I've been part of cutting-edge research at Cornell's Sci-Fi Lab and AIR Lab,
               and even contributed to MIT's C-CEM Tasan program during high school.
             </p>

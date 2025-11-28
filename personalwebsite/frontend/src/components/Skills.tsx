@@ -217,27 +217,6 @@ export function Skills() {
             ))}
         </motion.div>
 
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-cyan-400/10 to-yellow-400/10 p-8 rounded-lg border border-gray-700">
-            <h3 className="text-2xl font-bold text-white mb-4">Always Learning</h3>
-            <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
-              Technology evolves rapidly, and I stay current with the latest developments in AI, machine learning,
-              and software engineering. I'm always excited to learn new tools and frameworks.
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 text-sm text-gray-500">
-              <span className="bg-gray-700 px-3 py-1 rounded">Continuous Learning</span>
-              <span className="bg-gray-700 px-3 py-1 rounded">Research Driven</span>
-              <span className="bg-gray-700 px-3 py-1 rounded">Innovation Focused</span>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

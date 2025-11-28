@@ -46,20 +46,29 @@ export function Header({ onNavigate, currentSection, onLaunchPortfolio }: Header
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
+          {/* Enhanced Logo */}
           <motion.div
-            className="flex items-center space-x-3"
+            className="flex items-center space-x-4"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-blue-500 to-yellow-400 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-400/30 border border-cyan-300/20">
-              <span className="text-gray-900 font-bold text-sm drop-shadow-sm">JK</span>
+            <div className="relative">
+              <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 via-blue-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-cyan-400/40 border-2 border-cyan-300/30 relative overflow-hidden">
+                {/* Animated background effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent animate-pulse"></div>
+                <span className="text-gray-900 font-black text-sm drop-shadow-lg relative z-10 tracking-wider">JK</span>
+              </div>
+              {/* Subtle glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-yellow-400 rounded-2xl blur-lg opacity-30 -z-10"></div>
             </div>
+
             <div className="flex flex-col">
-              <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-sm">
+              <span className="text-2xl font-black bg-gradient-to-r from-cyan-300 via-blue-300 to-yellow-300 bg-clip-text text-transparent drop-shadow-lg leading-tight">
                 Jae Kim
               </span>
-              <span className="text-xs text-gray-400 font-medium tracking-wider uppercase">Portfolio</span>
+              <span className="text-xs text-cyan-300 font-bold tracking-[0.3em] uppercase bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
+                PORTFOLIO
+              </span>
             </div>
           </motion.div>
 

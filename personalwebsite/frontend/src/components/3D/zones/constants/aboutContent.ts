@@ -1,7 +1,7 @@
 export const aboutContent = {
   title: "About Jae Kim",
   subtitle: "AI Engineer • Healthcare ML",
-  content: `Hi! I'm Jae Kim, an AI Engineer at MSKCC building healthcare ML solutions. Research experience at Cornell Sci-Fi Lab, AIR Lab, and materials science research with Prof. Tasan.
+  content: `Hi! I'm Jae Kim, an AI Engineer formerly at MSKCC building healthcare ML solutions. Research experience at Cornell Sci-Fi Lab, AIR Lab, and materials science research with Prof. Tasan.
 
 Cornell BA/MS '25 with 2 publications, specializing in clinical AI and NLP.`,
   highlights: [

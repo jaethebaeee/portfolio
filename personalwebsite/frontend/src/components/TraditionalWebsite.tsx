@@ -59,9 +59,7 @@ export function TraditionalWebsite({ onBack, onForward }: TraditionalWebsiteProp
       {/* Vintage Navigation Buttons */}
       <VintageNavigationButtons
         onBack={onBack}
-        onForward={onForward}
         canGoBack={!!onBack}
-        canGoForward={!!onForward}
         delay={1.2}
       />
     </div>
