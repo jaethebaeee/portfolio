@@ -83,7 +83,7 @@ export const AboutZone = React.memo(function AboutZone() {
           anchorX="center"
           anchorY="middle"
         >
-          Computational Biologist & ML Researcher
+          Computer Science & ML Researcher
         </Text>
         <Text
           position={[0, -0.1, 0.06]}

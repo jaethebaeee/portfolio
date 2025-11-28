@@ -7,11 +7,11 @@ import { ChatMessage } from '@/types';
 const STATIC_KNOWLEDGE_BASE = [
   {
     title: 'Academic Overview',
-    content: "Hi! I'm Jae Kim, a Cornell BA/MS '25 candidate with research experience in computational oncology at Memorial Sloan Kettering Cancer Center. I have 2 peer-reviewed publications and specialize in computational biology, machine learning for biomedical data, and signal processing.",
+    content: "Hi! I'm Jae Kim, a Cornell BA/MS '25 candidate with research experience in machine learning and data science. I have 2 peer-reviewed publications and specialize in computer science applications across domains, with expertise in ML algorithms, data processing, and computational methods.",
   },
   {
     title: 'Research Expertise',
-    content: "My research focuses on: Computational Biology, Machine Learning for Biomedical Data, Signal Processing Algorithms, Natural Language Processing for Scientific Literature, Multi-omics Data Analysis, and Computational Methods for Biological Discovery.",
+    content: "My research focuses on: Machine Learning Algorithms, Large-Scale Data Processing, Signal Processing, Natural Language Processing, Statistical Modeling, and Computational Methods for Data-Driven Discovery across domains.",
   },
   {
     title: 'Publications & Research',
@@ -19,11 +19,11 @@ const STATIC_KNOWLEDGE_BASE = [
   },
   {
     title: 'MSKCC Research',
-    content: "At Memorial Sloan Kettering Cancer Center, I developed machine learning models for cancer subtype classification using multi-omics data integration. Research focused on translational oncology applications with potential to improve personalized cancer treatment outcomes.",
+    content: "At Memorial Sloan Kettering Cancer Center, I developed advanced machine learning models for complex data classification using multi-modal data integration. Research focused on scalable ML algorithms with 92% accuracy and applications for computational analysis of large-scale datasets.",
   },
   {
     title: 'Academic Background',
-    content: "I am completing my BA/MS in Computer Science at Cornell University with research experience in healthcare AI. My work has resulted in peer-reviewed publications and collaborations with leading medical institutions including MSKCC and Cornell's Sci Fi Lab.",
+    content: "I am completing my BA/MS in Computer Science at Cornell University with research experience in machine learning and data science. My work has resulted in peer-reviewed publications and collaborations with leading research institutions including MSKCC and Cornell's Sci Fi Lab.",
   },
   {
     title: 'Technical Skills',

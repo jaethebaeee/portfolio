@@ -38,74 +38,117 @@ export function Header({ onNavigate, currentSection, onLaunchPortfolio }: Header
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-gray-900/95 backdrop-blur-md border-b border-gray-800'
+          ? 'bg-gray-900/98 backdrop-blur-xl border-b border-gray-700/50 shadow-2xl shadow-gray-900/50'
           : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <motion.div
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-3"
             whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-yellow-400 rounded-lg flex items-center justify-center">
-              <span className="text-gray-900 font-bold text-sm">JK</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 via-blue-500 to-yellow-400 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-400/30 border border-cyan-300/20">
+              <span className="text-gray-900 font-bold text-sm drop-shadow-sm">JK</span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-yellow-400 bg-clip-text text-transparent">
-              Jae Kim
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-sm">
+                Jae Kim
+              </span>
+              <span className="text-xs text-gray-400 font-medium tracking-wider uppercase">Portfolio</span>
+            </div>
           </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center justify-between w-full gap-8">
-            <div className="flex items-center gap-4">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => handleNavigate(item.id)}
-                  className={`relative px-3 py-2 text-sm font-medium transition-colors ${
-                    currentSection === item.id
-                      ? 'text-cyan-400'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
+          <nav className="hidden md:flex items-center justify-center w-full">
+            <div className="flex items-center gap-8">
+              {/* Left Navigation Items */}
+              <div className="flex items-center gap-4">
+                {navItems.slice(0, 3).map((item) => (
+                  <motion.button
+                    key={item.id}
+                    onClick={() => handleNavigate(item.id)}
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors ${
+                      currentSection === item.id
+                        ? 'text-cyan-400'
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item.label}
+                    {currentSection === item.id && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 to-yellow-400 rounded-full"
+                      />
+                    )}
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Central MAP ENTER Button */}
+              {onLaunchPortfolio && (
+                <motion.div
+                  className="mx-6"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {item.label}
-                  {currentSection === item.id && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 to-yellow-400 rounded-full"
-                    />
-                  )}
-                </motion.button>
-              ))}
-            </div>
+                  <StartExperienceButton
+                    onClick={onLaunchPortfolio}
+                    icon="🗺️"
+                    label="ENTER"
+                    subtitle="3D WORLD"
+                    variant="vintage"
+                    className="min-w-[140px] px-6 py-3 text-[0.8rem] uppercase tracking-[0.4em] shadow-2xl"
+                  />
+                </motion.div>
+              )}
 
-            {onLaunchPortfolio && (
-              <div className="flex items-center">
-                <StartExperienceButton
-                  onClick={onLaunchPortfolio}
-                  icon="🔥"
-                  label="MAP"
-                  subtitle="ENTER"
-                  variant="vintage"
-                  className="min-w-[110px] px-4 py-3 text-[0.75rem] uppercase tracking-[0.35em]"
-                />
+              {/* Right Navigation Items */}
+              <div className="flex items-center gap-4">
+                {navItems.slice(3).map((item) => (
+                  <motion.button
+                    key={item.id}
+                    onClick={() => handleNavigate(item.id)}
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors ${
+                      currentSection === item.id
+                        ? 'text-cyan-400'
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item.label}
+                    {currentSection === item.id && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 to-yellow-400 rounded-full"
+                      />
+                    )}
+                  </motion.button>
+                ))}
               </div>
-            )}
+            </div>
           </nav>
 
           {/* Mobile menu button */}
           <motion.button
-            className="md:hidden p-2 rounded-lg bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
+            className="md:hidden p-3 rounded-xl bg-gray-800/80 backdrop-blur-sm text-gray-300 hover:text-white hover:bg-gray-700/80 transition-all duration-300 border border-gray-600/30 shadow-lg"
             onClick={() => setIsOpen(!isOpen)}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <motion.div
+              animate={{ rotate: isOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </motion.div>
           </motion.button>
         </div>
       </div>
@@ -117,35 +160,36 @@ export function Header({ onNavigate, currentSection, onLaunchPortfolio }: Header
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800"
+            className="md:hidden bg-gray-900/98 backdrop-blur-xl border-t border-gray-700/50 shadow-2xl"
           >
-              <div className="px-4 py-6 space-y-2">
+              <div className="px-4 py-6 space-y-3">
                 {navItems.map((item, index) => (
                   <motion.button
                     key={item.id}
                     onClick={() => handleNavigate(item.id)}
-                    className={`block w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                    className={`block w-full text-left px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 ${
                       currentSection === item.id
-                        ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-400/30'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                        ? 'bg-gradient-to-r from-cyan-400/20 to-blue-400/20 text-cyan-400 border border-cyan-400/40 shadow-lg shadow-cyan-400/20'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-800/60 border border-transparent hover:border-gray-600/30'
                     }`}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.02, x: 4 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     {item.label}
                   </motion.button>
                 ))}
                 {onLaunchPortfolio && (
-                  <div className="mt-2">
+                  <div className="mt-4 px-2">
                     <StartExperienceButton
                       onClick={onLaunchPortfolio}
-                      icon="🔥"
-                      label="3D"
-                      subtitle="LIVE"
+                      icon="🗺️"
+                      label="ENTER"
+                      subtitle="3D WORLD"
                       variant="vintage"
-                      className="w-full text-[0.75rem] px-3 py-2"
+                      className="w-full text-[0.8rem] px-4 py-3 tracking-[0.3em]"
                     />
                   </div>
                 )}
