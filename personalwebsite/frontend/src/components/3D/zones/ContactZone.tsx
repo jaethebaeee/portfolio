@@ -92,7 +92,7 @@ export const ContactZone = React.memo(function ContactZone() {
           anchorX="center"
           anchorY="middle"
         >
-          LinkedIn: /in/jae-ai
+          LinkedIn: /in/jaehoon-kim
         </Text>
         <Text
           position={[0, -0.1, 0.06]}
@@ -101,7 +101,7 @@ export const ContactZone = React.memo(function ContactZone() {
           anchorX="center"
           anchorY="middle"
         >
-          GitHub: @jae-ai-engineer
+          GitHub: @jae-kim-research
         </Text>
         <Text
           position={[0, -0.6, 0.06]}
@@ -110,7 +110,7 @@ export const ContactZone = React.memo(function ContactZone() {
           anchorX="center"
           anchorY="middle"
         >
-          Email: jae@healthcare.ai
+          Email: jk2589@cornell.edu
         </Text>
       </group>
 

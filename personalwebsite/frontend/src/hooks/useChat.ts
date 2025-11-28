@@ -6,28 +6,32 @@ import { ChatMessage } from '@/types';
 // Static knowledge base for the AI assistant
 const STATIC_KNOWLEDGE_BASE = [
   {
-    title: 'Professional Overview',
-    content: "Hi! I'm Jae Kim, an AI Engineer building healthcare ML solutions. Cornell BA/MS '25 with 2 publications, specializing in clinical AI and NLP. I create ML systems that improve patient care and reduce healthcare costs.",
+    title: 'Academic Overview',
+    content: "Hi! I'm Jae Kim, a Cornell BA/MS '25 candidate with research experience in computational oncology at Memorial Sloan Kettering Cancer Center. I have 2 peer-reviewed publications and specialize in computational biology, machine learning for biomedical data, and signal processing.",
   },
   {
-    title: 'Technical Skills',
-    content: "My core technical skills include: Machine Learning, Clinical AI, Natural Language Processing, Python, TensorFlow, PyTorch, React, TypeScript, Node.js, and modern AI/ML frameworks.",
+    title: 'Research Expertise',
+    content: "My research focuses on: Computational Biology, Machine Learning for Biomedical Data, Signal Processing Algorithms, Natural Language Processing for Scientific Literature, Multi-omics Data Analysis, and Computational Methods for Biological Discovery.",
   },
   {
-    title: 'Key Projects',
-    content: "Some of my notable projects include: MSKCC Cancer Research (computational oncology at Memorial Sloan Kettering Cancer Center), Clinical ML Pipeline (healthcare AI system), Real-time Biosensor Analytics (wearable device data processing), and this 3D Portfolio Website. Each project showcases my expertise in AI and healthcare applications.",
+    title: 'Publications & Research',
+    content: "Key research includes: Acta Materialia publication on physics-enhanced machine learning for metallic materials (2024), MSKCC computational oncology research developing ML models for cancer subtype classification (92% accuracy), and biosensor analytics research at Cornell Sci Fi Lab with 200+ participants.",
   },
   {
     title: 'MSKCC Research',
-    content: "Jae collaborated with Memorial Sloan Kettering Cancer Center on computational oncology research. He developed machine learning models for cancer diagnosis prediction, treatment response optimization, and clinical decision support systems using multi-omics data analysis.",
+    content: "At Memorial Sloan Kettering Cancer Center, I developed machine learning models for cancer subtype classification using multi-omics data integration. Research focused on translational oncology applications with potential to improve personalized cancer treatment outcomes.",
   },
   {
-    title: 'Professional Experience',
-    content: "I specialize in clinical machine learning, natural language processing, and real-time biosensor systems. As a Cornell BA/MS '25 student with 2 peer-reviewed publications, I build ML systems that healthcare providers actually use. I have research experience at Memorial Sloan Kettering Cancer Center (MSKCC) working on computational oncology and cancer research.",
+    title: 'Academic Background',
+    content: "I am completing my BA/MS in Computer Science at Cornell University with research experience in healthcare AI. My work has resulted in peer-reviewed publications and collaborations with leading medical institutions including MSKCC and Cornell's Sci Fi Lab.",
+  },
+  {
+    title: 'Technical Skills',
+    content: "Core competencies include: Python, R, TensorFlow, PyTorch, Machine Learning, Deep Learning, Clinical NLP, Signal Processing, Multi-omics Analysis, and Biomedical Data Science.",
   },
   {
     title: 'Contact Information',
-    content: "You can reach out through the contact form on this website. I'm always interested in discussing new opportunities in AI research, healthcare ML, or collaborations!",
+    content: "You can reach out through the contact form on this website. I'm interested in discussing PhD opportunities in healthcare AI, computational biology, or clinical machine learning research.",
   },
 ];
 
@@ -64,23 +68,25 @@ export const useChat = () => {
       let response = '';
 
       if (query.includes('hello') || query.includes('hi') || query.includes('hey')) {
-        response = "Hi there! I'm Jae's AI assistant. I'm here to help you learn more about Jae's background as an AI Engineer focused on healthcare ML. What would you like to know?";
+        response = "Hi there! I'm Jae's AI assistant. I'm here to help you learn more about Jae's research background in healthcare AI and computational biology. What would you like to know about his academic work and publications?";
       } else if (query.includes('skill') || query.includes('technology') || query.includes('tech')) {
-        response = "Jae works with AI/ML technologies including Machine Learning, Clinical AI, Natural Language Processing, Python, TensorFlow, and PyTorch. He has experience in healthcare applications and real-time systems. Check out his skills section for a complete list!";
-      } else if (query.includes('project') || query.includes('work')) {
-        response = "Jae has worked on projects including MSKCC Cancer Research (computational oncology), Clinical ML Pipeline (healthcare AI system), Real-time Biosensor Analytics (wearable device processing), and this 3D Portfolio Website. Each project shows his work in AI and healthcare.";
+        response = "Jae specializes in research technologies including Python, R, TensorFlow, PyTorch, Machine Learning, Clinical NLP, Biomedical Signal Processing, and Multi-omics Data Analysis. His work focuses on healthcare AI applications and computational biology.";
+      } else if (query.includes('project') || query.includes('work') || query.includes('research')) {
+        response = "Jae's research includes MSKCC computational oncology (cancer subtype classification), Cornell Sci Fi Lab biosensor analytics (wearable device processing), materials science EML research (physics-enhanced ML), and clinical NLP systems. Each project demonstrates his expertise in healthcare AI and computational methods.";
       } else if (query.includes('experience') || query.includes('background')) {
-        response = "Jae is an AI Engineer focused on healthcare ML, currently finishing his Cornell BA/MS '25 with 2 peer-reviewed publications. He has research experience at Memorial Sloan Kettering Cancer Center working on computational oncology, and specializes in clinical machine learning, NLP, and real-time biosensor systems.";
+        response = "Jae is a Cornell BA/MS '25 candidate with research experience at Memorial Sloan Kettering Cancer Center and Cornell's Sci Fi Lab. He has 2 peer-reviewed publications and specializes in clinical machine learning, computational oncology, and biomedical signal processing.";
       } else if (query.includes('contact') || query.includes('reach') || query.includes('email')) {
-        response = "You can reach out through the contact form on this website. Jae is interested in discussing new opportunities in AI, healthcare ML, or collaborations!";
+        response = "You can reach out through the contact form on this website. Jae is interested in discussing PhD opportunities in healthcare AI, computational biology, or clinical machine learning research!";
       } else if (query.includes('education') || query.includes('degree') || query.includes('university')) {
-        response = "Jae is finishing his Cornell BA/MS '25 with 2 peer-reviewed publications. His work focuses on clinical machine learning and healthcare AI applications, including research at Memorial Sloan Kettering Cancer Center.";
+        response = "Jae is completing his BA/MS in Computer Science at Cornell University with a focus on healthcare AI and computational biology. His research has resulted in peer-reviewed publications and collaborations with leading medical institutions.";
       } else if (query.includes('mskcc') || query.includes('memorial sloan') || query.includes('cancer') || query.includes('oncology')) {
-        response = "Jae collaborated with Memorial Sloan Kettering Cancer Center on computational oncology research. He developed machine learning models for cancer diagnosis prediction, treatment response optimization, and clinical decision support systems using multi-omics data analysis. This work contributed to advancing computational approaches in cancer research.";
+        response = "At Memorial Sloan Kettering Cancer Center, Jae developed machine learning models for cancer subtype classification using multi-omics data integration. His research focused on translational oncology with 92% accuracy in cancer subtype prediction and applications for personalized cancer treatment.";
+      } else if (query.includes('publication') || query.includes('paper') || query.includes('journal')) {
+        response = "Jae has published in Acta Materialia (2024) on physics-enhanced machine learning for metallic materials yield strength prediction, and has additional research in computational oncology and biosensor analytics with clinical validation on 200+ participants.";
       } else if (query.includes('ai') || query.includes('machine learning') || query.includes('ml')) {
-        response = "Jae is an expert in AI and machine learning, particularly in healthcare applications including oncology research at MSKCC. He has deployed AI solutions that improve patient outcomes by 25%+ and has extensive experience with clinical ML, NLP, and real-time biosensor systems.";
+        response = "Jae specializes in healthcare AI and computational biology, with research in clinical machine learning, computational oncology, and biomedical signal processing. His work includes ML models for cancer classification (92% accuracy) and clinical NLP systems with 94% accuracy in medical concept extraction.";
       } else {
-        response = "I'd be happy to help you learn more about Jae! Feel free to ask about his AI research, healthcare ML work, projects, experience, or anything else related to his background and expertise.";
+        response = "I'd be happy to help you learn more about Jae's research! Feel free to ask about his publications, healthcare AI work, computational biology research, academic background, or anything else related to his research expertise.";
       }
 
       // Find relevant knowledge sources

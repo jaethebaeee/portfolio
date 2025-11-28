@@ -83,7 +83,7 @@ export const AboutZone = React.memo(function AboutZone() {
           anchorX="center"
           anchorY="middle"
         >
-          AI Engineer & ML Researcher
+          Computational Biologist & ML Researcher
         </Text>
         <Text
           position={[0, -0.1, 0.06]}
@@ -92,7 +92,7 @@ export const AboutZone = React.memo(function AboutZone() {
           anchorX="center"
           anchorY="middle"
         >
-          Healthcare Technology Focus
+          Healthcare AI & Clinical ML
         </Text>
         <Text
           position={[0, -0.6, 0.06]}
@@ -233,8 +233,8 @@ export const AboutZone = React.memo(function AboutZone() {
       {/* Interactive Info Waypoints */}
       <InfoWaypoint
         position={[-4, 4, -2]}
-        title="AI Engineering"
-        content="Specialized in building AI systems for healthcare applications, from computer vision diagnostics to clinical decision support."
+        title="Clinical AI Research"
+        content="Research in machine learning for healthcare, including computational oncology at MSKCC, clinical NLP systems, and biomedical signal processing at Cornell Sci Fi Lab."
         icon="🤖"
         color="#4ecdc4"
         zoneType="about"
@@ -242,8 +242,8 @@ export const AboutZone = React.memo(function AboutZone() {
 
       <InfoWaypoint
         position={[4, 4, -2]}
-        title="Technical Leadership"
-        content="Leading development of machine learning pipelines and computer vision systems for medical imaging and healthcare data."
+        title="Research Leadership"
+        content="Leading research in computational oncology and clinical ML, with publications in peer-reviewed journals and collaborations with top medical institutions."
         icon="🧠"
         color="#00ff88"
         zoneType="about"
@@ -251,8 +251,8 @@ export const AboutZone = React.memo(function AboutZone() {
 
       <InfoWaypoint
         position={[-3, 2, 4]}
-        title="Innovation Focus"
-        content="Pushing boundaries in healthcare AI, combining deep learning with clinical workflows to improve patient outcomes."
+        title="Translational Research"
+        content="Bridging computational methods with biological data analysis, developing ML models for large-scale health data processing and computational discovery in biomedicine."
         icon="⚡"
         color="#ff6b6b"
         zoneType="about"
@@ -260,8 +260,8 @@ export const AboutZone = React.memo(function AboutZone() {
 
       <InfoWaypoint
         position={[3, 2, 4]}
-        title="Full-Stack AI"
-        content="End-to-end development from data pipelines to user interfaces, building complete AI-powered healthcare solutions."
+        title="Multidisciplinary Research"
+        content="Integrating computational biology, machine learning, and clinical medicine to develop innovative healthcare AI solutions with strong methodological foundations."
         icon="🎯"
         color="#ffe66d"
         zoneType="about"
@@ -269,8 +269,8 @@ export const AboutZone = React.memo(function AboutZone() {
 
       <InfoWaypoint
         position={[0, 6, 0]}
-        title="Jae's Mission"
-        content="Using AI to revolutionize healthcare, making advanced medical technology accessible and effective for better patient care worldwide."
+        title="Research Vision"
+        content="Advancing computational biology and healthcare AI through rigorous research, developing ML systems for biological data analysis, clinical informatics, and computational modeling of health processes."
         icon="🌟"
         color="#ffffff"
         zoneType="about"

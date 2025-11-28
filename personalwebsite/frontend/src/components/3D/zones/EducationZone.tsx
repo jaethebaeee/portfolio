@@ -128,30 +128,39 @@ export const EducationZone = React.memo(function EducationZone() {
         </Text>
         <Text
           position={[0, 0.2, 0.06]}
-          fontSize={0.22}
+          fontSize={0.2}
           color="#ffffff"
           anchorX="center"
           anchorY="middle"
         >
-          2 Publications
+          Peer-Reviewed Publications
         </Text>
         <Text
-          position={[0, -0.3, 0.06]}
-          fontSize={0.18}
+          position={[0, -0.2, 0.06]}
+          fontSize={0.16}
           color="#00ff88"
           anchorX="center"
           anchorY="middle"
         >
-          Healthcare AI
+          Acta Materialia (2024)
         </Text>
         <Text
-          position={[0, -0.8, 0.06]}
-          fontSize={0.16}
+          position={[0, -0.6, 0.06]}
+          fontSize={0.14}
+          color="#4ecdc4"
+          anchorX="center"
+          anchorY="middle"
+        >
+          Computational Oncology
+        </Text>
+        <Text
+          position={[0, -1.0, 0.06]}
+          fontSize={0.12}
           color="#cccccc"
           anchorX="center"
           anchorY="middle"
         >
-          Clinical ML • NLP
+          Clinical ML Research
         </Text>
       </group>
 
@@ -241,7 +250,7 @@ export const EducationZone = React.memo(function EducationZone() {
       <InfoWaypoint
         position={[6, 4, -3]}
         title="Published Research"
-        content="2 peer-reviewed papers in healthcare AI, clinical ML, and medical NLP. Research on predictive modeling and real-time data processing."
+        content="Published in Acta Materialia (2024) on physics-enhanced ML for materials science. Additional research in computational oncology at MSKCC and biosensor analytics at Cornell Sci Fi Lab."
         icon="🧠"
         color="#00ff88"
         zoneType="education"

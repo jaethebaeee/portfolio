@@ -35,7 +35,7 @@ Key technical challenges solved:
     status: 'completed',
     liveUrl: 'https://groupbuy.app',
     featured: true,
-    impact: 'Reduced transaction costs by 40% through group purchasing optimization',
+    impact: 'Advanced real-time synchronization algorithms enabling coordinated purchasing across distributed users',
     year: 2024,
     duration: '6 months'
   },
@@ -78,7 +78,7 @@ Innovative features:
     status: 'completed',
     liveUrl: 'https://jae-kim.dev',
     featured: true,
-    impact: 'Unique portfolio that increased engagement by 300% compared to traditional sites',
+    impact: 'Innovative 3D interface combining gaming aesthetics with AI-powered conversational search for enhanced user experience',
     year: 2024,
     duration: '3 months'
   },
@@ -173,7 +173,7 @@ Scalability & Performance:
     category: 'full-stack',
     status: 'completed',
     featured: false,
-    impact: 'Automated retail operations achieving 40% cost reduction and $2M+ annual revenue increase through AI-driven optimization and operational efficiency',
+    impact: 'Developed scalable microservices architecture handling 10K+ concurrent users with sub-millisecond response times for critical retail operations',
     year: 2022,
     duration: '9 months'
   },
@@ -214,44 +214,6 @@ Research Applications:
     duration: 'Ongoing'
   },
   {
-    id: 'kelshi-api',
-    title: 'Kelshi Arbitrage Engine',
-    subtitle: 'Automated Cryptocurrency Arbitrage Platform',
-    description: 'High-frequency arbitrage trading platform that automatically identifies and executes profitable price discrepancies across 15+ cryptocurrency exchanges',
-    longDescription: `Developed a sophisticated automated arbitrage trading platform that continuously monitors cryptocurrency prices across multiple exchanges and executes profitable arbitrage opportunities in real-time. The system implements advanced algorithms for statistical arbitrage, triangular arbitrage, and cross-exchange price discrepancies.
-
-Arbitrage Strategies Implemented:
-• Statistical arbitrage using mean-reversion algorithms and cointegration analysis
-• Triangular arbitrage across three currency pairs for risk-free profits
-• Cross-exchange arbitrage exploiting price inefficiencies between trading platforms
-• High-frequency trading algorithms with sub-millisecond execution
-• Multi-asset arbitrage including BTC, ETH, and altcoin pairs
-• Dynamic position sizing and risk management per arbitrage opportunity
-
-Technical Architecture:
-• Real-time market data ingestion from 15+ cryptocurrency exchanges via WebSocket and REST APIs
-• High-throughput order execution engine with automatic trade routing
-• Advanced risk management system with position limits and stop-loss mechanisms
-• Real-time portfolio optimization and rebalancing algorithms
-• Comprehensive trading analytics and performance monitoring dashboards
-• Enterprise-grade security with encrypted communication and secure API keys
-
-Automated Trading Features:
-• 24/7 autonomous operation with intelligent downtime management
-• Adaptive algorithms that learn from market conditions and adjust strategies
-• Multi-threaded execution engine handling thousands of concurrent arbitrage checks
-• Automated profit withdrawal and portfolio rebalancing
-• Comprehensive logging and error handling for production reliability
-• Integration with exchange APIs for seamless order execution and position management`,
-    technologies: ['Node.js', 'Express', 'MongoDB', 'Redis', 'WebSocket', 'Docker', 'AWS', 'CCXT', 'Pandas', 'NumPy', 'AsyncIO'],
-    category: 'full-stack',
-    status: 'completed',
-    featured: false,
-    impact: 'Automated arbitrage engine achieving 12% monthly returns, processing $500K+ daily trading volume across multiple cryptocurrency exchanges',
-    year: 2023,
-    duration: '4 months'
-  },
-  {
     id: 'mskcc-research',
     title: 'MSKCC Computational Oncology',
     subtitle: 'Memorial Sloan Kettering Cancer Center - AI-Driven Cancer Research',
@@ -287,28 +249,6 @@ Clinical Applications:
     impact: 'Developed ML models with 92% accuracy for cancer subtype classification, contributed to translational oncology research with potential to improve personalized cancer treatment and patient outcomes',
     year: 2023,
     duration: '6 months'
-  },
-  {
-    id: 'crypto-arbitrage',
-    title: 'Cryptocurrency Arbitrage Engine',
-    subtitle: 'Automated Cross-Exchange Trading System',
-    description: 'Real-time arbitrage detection and execution system across multiple cryptocurrency exchanges',
-    longDescription: `Developed an automated arbitrage trading system that identifies and executes profitable price discrepancies across cryptocurrency exchanges in real-time. The system monitors multiple exchanges simultaneously and executes trades when profitable arbitrage opportunities arise.
-
-Technical implementation:
-• Multi-exchange API integration (Binance, Coinbase, Kraken, etc.)
-• Real-time price monitoring and arbitrage detection
-• Automated trade execution with risk controls
-• Statistical arbitrage strategies implementation
-• Backtesting framework for strategy validation
-• Performance analytics and reporting dashboard`,
-    technologies: ['Python', 'Pandas', 'NumPy', 'CCXT', 'AsyncIO', 'PostgreSQL', 'Grafana'],
-    category: 'ai-ml',
-    status: 'completed',
-    featured: false,
-    impact: 'Achieved 12% monthly returns through automated arbitrage strategies',
-    year: 2023,
-    duration: '3 months'
   }
 ];
 
