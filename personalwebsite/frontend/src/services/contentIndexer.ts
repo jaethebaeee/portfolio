@@ -1,4 +1,4 @@
-import { projects, technologies } from '../data/projects';
+import { projects } from '../data/projects';
 import { technologies as techData } from '../data/technologies';
 
 export interface DocumentChunk {

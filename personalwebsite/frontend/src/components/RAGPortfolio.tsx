@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Search, Bot, User, ExternalLink, ChevronLeft, Home } from 'lucide-react';
+import { Send, Search, Bot, User, ChevronLeft, Home } from 'lucide-react';
 import { ragOrchestrator, RAGResponse } from '../services/ragOrchestrator';
 import { DocumentChunk } from '../services/contentIndexer';
 
@@ -15,10 +15,9 @@ interface Message {
 interface RAGPortfolioProps {
   onExit?: () => void;
   onBack?: () => void;
-  onForward?: () => void;
 }
 
-export function RAGPortfolio({ onExit, onBack, onForward }: RAGPortfolioProps) {
+export function RAGPortfolio({ onExit, onBack }: RAGPortfolioProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
@@ -100,12 +99,6 @@ export function RAGPortfolio({ onExit, onBack, onForward }: RAGPortfolioProps) {
     inputRef.current?.focus();
   };
 
-  const formatSourceLink = (source: DocumentChunk) => {
-    if (source.metadata.type === 'project') {
-      return `#project-${source.id}`;
-    }
-    return `#${source.metadata.type}`;
-  };
 
   return (
     <div className="h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col">
