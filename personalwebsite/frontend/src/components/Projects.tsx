@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { ExternalLink, Github, Calendar, Clock, Award, Grid3X3, List } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useMemo } from 'react';
+import { ExternalLink, Github, Calendar, Clock, Award, Grid3X3, List, Search, X, Filter } from 'lucide-react';
 import { projects, projectCategories } from '@/data/projects';
 
 type ViewMode = 'grid' | 'list';
@@ -8,13 +8,29 @@ type ViewMode = 'grid' | 'list';
 export function Projects() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
-  const filteredProjects = selectedCategory === 'all'
-    ? projects
-    : projects.filter(project => project.category === selectedCategory);
+  const filteredProjects = useMemo(() => {
+    let filtered = selectedCategory === 'all'
+      ? projects
+      : projects.filter(project => project.category === selectedCategory);
 
-  const featuredProjects = filteredProjects.filter(p => p.featured);
-  const otherProjects = filteredProjects.filter(p => !p.featured);
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(project =>
+        project.title.toLowerCase().includes(query) ||
+        project.subtitle.toLowerCase().includes(query) ||
+        project.description.toLowerCase().includes(query) ||
+        project.technologies.some(tech => tech.toLowerCase().includes(query))
+      );
+    }
+
+    return filtered;
+  }, [selectedCategory, searchQuery]);
+
+  const filteredFeaturedProjects = useMemo(() => filteredProjects.filter(p => p.featured), [filteredProjects]);
+  const filteredOtherProjects = useMemo(() => filteredProjects.filter(p => !p.featured), [filteredProjects]);
 
   const ProjectCard = ({ project, index, isCompact = false }: { project: typeof projects[0], index: number, isCompact?: boolean }) => {
     const categoryInfo = projectCategories[project.category];
@@ -156,69 +172,158 @@ export function Projects() {
           </p>
         </motion.div>
 
-        {/* Filters and Controls */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+        {/* Enhanced Filters and Controls */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-          className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-12"
+          viewport={{ once: true }}
+          className="mb-12 space-y-6"
         >
-          {/* Category Filters */}
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedCategory === 'all'
-                  ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-400/30'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
-              }`}
-            >
-              All Projects ({projects.length})
-            </button>
-            {Object.entries(projectCategories).map(([key, category]) => (
-              <button
-                key={key}
-                onClick={() => setSelectedCategory(key)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedCategory === key
+          {/* Search and Filter Toggle */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+            {/* Search Bar */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search projects, technologies..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-gray-800/80 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-200"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-700 rounded"
+                >
+                  <X className="w-4 h-4 text-gray-400" />
+                </button>
+              )}
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center gap-3">
+              {/* Filter Toggle */}
+              <motion.button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`p-3 rounded-xl transition-all duration-200 ${
+                  showFilters
                     ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-400/30'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
+                    : 'bg-gray-800/80 text-gray-400 hover:text-white border border-gray-600/30 hover:border-gray-500/50'
                 }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <span className="mr-2">{category.icon}</span>
-                {category.name} ({projects.filter(p => p.category === key).length})
-              </button>
-            ))}
+                <Filter className="w-4 h-4" />
+              </motion.button>
+
+              {/* View Mode Toggle */}
+              <div className="flex bg-gray-800/80 rounded-xl p-1 border border-gray-600/30">
+                <motion.button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    viewMode === 'grid'
+                      ? 'bg-cyan-400/20 text-cyan-400 shadow-lg'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Grid3X3 className="w-4 h-4" />
+                </motion.button>
+                <motion.button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    viewMode === 'list'
+                      ? 'bg-cyan-400/20 text-cyan-400 shadow-lg'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <List className="w-4 h-4" />
+                </motion.button>
+              </div>
+            </div>
           </div>
 
-          {/* View Mode Toggle */}
-          <div className="flex bg-gray-700 rounded-lg p-1">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'grid'
-                  ? 'bg-cyan-400/20 text-cyan-400'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              <Grid3X3 className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'list'
-                  ? 'bg-cyan-400/20 text-cyan-400'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              <List className="w-4 h-4" />
-            </button>
-          </div>
+          {/* Expandable Category Filters */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="bg-gray-800/40 rounded-xl p-6 border border-gray-700/50">
+                  <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+                    <Filter className="w-4 h-4" />
+                    Filter by Category
+                  </h4>
+                  <div className="flex flex-wrap gap-3">
+                    <motion.button
+                      onClick={() => setSelectedCategory('all')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        selectedCategory === 'all'
+                          ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-400/30 shadow-lg'
+                          : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600 hover:text-white border border-transparent'
+                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      All Projects ({projects.length})
+                    </motion.button>
+                    {Object.entries(projectCategories).map(([key, category]) => (
+                      <motion.button
+                        key={key}
+                        onClick={() => setSelectedCategory(key)}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          selectedCategory === key
+                            ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-400/30 shadow-lg'
+                            : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600 hover:text-white border border-transparent'
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span className="mr-2">{category.icon}</span>
+                        {category.name} ({projects.filter(p => p.category === key).length})
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Results Summary */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center justify-between text-sm text-gray-400"
+          >
+            <span>
+              Showing {filteredProjects.length} of {projects.length} projects
+              {searchQuery && ` for "${searchQuery}"`}
+              {selectedCategory !== 'all' && ` in ${projectCategories[selectedCategory].name}`}
+            </span>
+
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+              >
+                <X className="w-3 h-3" />
+                Clear search
+              </button>
+            )}
+          </motion.div>
         </motion.div>
 
         {/* Featured Projects */}
-        {featuredProjects.length > 0 && (
+        {filteredFeaturedProjects.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -236,7 +341,7 @@ export function Projects() {
                 ? 'grid grid-cols-1 lg:grid-cols-2 gap-8'
                 : 'space-y-6'
             }>
-              {featuredProjects.map((project, index) => (
+              {filteredFeaturedProjects.map((project, index) => (
                 <ProjectCard
                   key={project.id}
                   project={project}
@@ -249,7 +354,7 @@ export function Projects() {
         )}
 
         {/* Other Projects */}
-        {otherProjects.length > 0 && (
+        {filteredOtherProjects.length > 0 && (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -265,7 +370,7 @@ export function Projects() {
                 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
                 : 'space-y-4'
             }>
-              {otherProjects.map((project, index) => (
+              {filteredOtherProjects.map((project, index) => (
                 <ProjectCard
                   key={project.id}
                   project={project}

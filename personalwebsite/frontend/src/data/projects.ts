@@ -56,7 +56,7 @@ Technical highlights:
     category: 'ai-ml',
     status: 'completed',
     featured: true,
-    impact: 'Improved patient outcome predictions by 25%, potentially saving 500+ lives annually',
+    impact: 'Developed clinical AI model for improved patient outcome predictions',
     year: 2023,
     duration: '8 months'
   },

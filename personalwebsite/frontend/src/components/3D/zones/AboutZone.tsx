@@ -92,7 +92,7 @@ export const AboutZone = React.memo(function AboutZone() {
           anchorX="center"
           anchorY="middle"
         >
-          Healthcare AI & Clinical ML
+          Machine Learning & Data Science
         </Text>
         <Text
           position={[0, -0.6, 0.06]}
@@ -234,7 +234,7 @@ export const AboutZone = React.memo(function AboutZone() {
       <InfoWaypoint
         position={[-4, 4, -2]}
         title="Clinical AI Research"
-        content="Research in machine learning for healthcare, including computational oncology at MSKCC, clinical NLP systems, and biomedical signal processing at Cornell Sci Fi Lab."
+        content="Research in machine learning algorithms and data science, including large-scale ML model development, natural language processing systems, and signal processing algorithms."
         icon="🤖"
         color="#4ecdc4"
         zoneType="about"
@@ -243,7 +243,7 @@ export const AboutZone = React.memo(function AboutZone() {
       <InfoWaypoint
         position={[4, 4, -2]}
         title="Research Leadership"
-        content="Leading research in computational oncology and clinical ML, with publications in peer-reviewed journals and collaborations with top medical institutions."
+        content="Leading research in machine learning and computer science, with publications in peer-reviewed journals and collaborations with top research institutions."
         icon="🧠"
         color="#00ff88"
         zoneType="about"
@@ -252,7 +252,7 @@ export const AboutZone = React.memo(function AboutZone() {
       <InfoWaypoint
         position={[-3, 2, 4]}
         title="Translational Research"
-        content="Bridging computational methods with biological data analysis, developing ML models for large-scale health data processing and computational discovery in biomedicine."
+        content="Bridging theoretical computer science with practical applications, developing ML algorithms for large-scale data processing and computational discovery across scientific domains."
         icon="⚡"
         color="#ff6b6b"
         zoneType="about"
@@ -261,7 +261,7 @@ export const AboutZone = React.memo(function AboutZone() {
       <InfoWaypoint
         position={[3, 2, 4]}
         title="Multidisciplinary Research"
-        content="Integrating computational biology, machine learning, and clinical medicine to develop innovative healthcare AI solutions with strong methodological foundations."
+        content="Integrating computer science, mathematics, and statistics to develop innovative ML algorithms and computational methods with rigorous theoretical foundations."
         icon="🎯"
         color="#ffe66d"
         zoneType="about"
@@ -270,7 +270,7 @@ export const AboutZone = React.memo(function AboutZone() {
       <InfoWaypoint
         position={[0, 6, 0]}
         title="Research Vision"
-        content="Advancing computational biology and healthcare AI through rigorous research, developing ML systems for biological data analysis, clinical informatics, and computational modeling of health processes."
+        content="Advancing computer science through rigorous research in machine learning, developing scalable ML systems for large-scale data analysis, computational discovery, and algorithmic innovation across domains."
         icon="🌟"
         color="#ffffff"
         zoneType="about"

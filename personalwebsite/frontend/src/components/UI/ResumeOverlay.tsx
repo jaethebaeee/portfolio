@@ -53,7 +53,7 @@ const RESUME_SECTIONS: ResumeSection[] = [
         heading: 'Research Assistant — AIR Lab, Cornell Tech',
         subtitle: 'Robotics & Wearable Systems · New York, NY · Fall 2023',
         points: [
-          'Implemented EMG signal ML pipelines enabling wearable-to-robotic control with 25% better reliability.',
+          'Implemented EMG signal ML pipelines enabling wearable-to-robotic control.',
         ],
       },
       {

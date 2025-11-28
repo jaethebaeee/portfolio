@@ -114,14 +114,18 @@ export function ChatOverlay() {
               </div>
 
               {/* Suggested Questions */}
-              <div className="grid grid-cols-1 gap-3 max-w-2xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-4xl mx-auto">
                 {[
-                  "What are Jae's main areas of expertise?",
-                  "Can you tell me about Jae's education background?",
-                  "What projects has Jae worked on recently?",
-                  "What technologies does Jae specialize in?",
-                  "What's Jae's experience with AI/ML?",
-                  "How can I contact Jae for collaboration?"
+                  "What's the most impactful healthcare AI project you've worked on?",
+                  "How do you approach the unique challenges of medical data?",
+                  "What inspired you to specialize in computational oncology?",
+                  "How has your research at MSKCC shaped your career goals?",
+                  "What emerging AI technologies excite you most for healthcare?",
+                  "How do you ensure your AI models are safe for clinical use?",
+                  "What's your proudest research achievement so far?",
+                  "How do you collaborate with clinicians and researchers?",
+                  "What role do you see AI playing in personalized medicine?",
+                  "How has your Cornell education influenced your research approach?"
                 ].map((question, index) => (
                   <motion.button
                     key={question}
@@ -209,12 +213,14 @@ export function ChatOverlay() {
               <p className="pixel-font text-xs text-gray-500 mb-3 text-center">
                 💡 More questions you might ask:
               </p>
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="grid grid-cols-2 gap-2 justify-center">
                 {[
-                  "Tell me about Jae's research",
-                  "What companies has Jae worked for?",
-                  "Jae's GitHub projects?",
-                  "AI healthcare experience?"
+                  "How do you approach clinical data challenges?",
+                  "What's your most challenging AI implementation?",
+                  "How do you validate healthcare AI models?",
+                  "What's your vision for AI in medicine?",
+                  "How do you stay current with AI advancements?",
+                  "What's your approach to interdisciplinary collaboration?"
                 ].map((suggestion, index) => (
                   <motion.button
                     key={suggestion}

@@ -148,6 +148,90 @@ export class SoundManager {
       (this as any).ambientOscillator.stop();
     }
   }
+
+  // Chat-specific sounds
+  playMessageSent(volume: number = 0.3) {
+    if (!this.enabled || !this.audioContext) return;
+
+    const oscillator = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+
+    // Pleasant "pop" sound for sending messages
+    oscillator.frequency.setValueAtTime(600, this.audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(800, this.audioContext.currentTime + 0.1);
+    oscillator.type = 'sine';
+
+    gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.15);
+
+    oscillator.start();
+    oscillator.stop(this.audioContext.currentTime + 0.15);
+  }
+
+  playMessageReceived(volume: number = 0.25) {
+    if (!this.enabled || !this.audioContext) return;
+
+    const oscillator = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+
+    // Soft chime for received messages
+    oscillator.frequency.setValueAtTime(400, this.audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(600, this.audioContext.currentTime + 0.2);
+    oscillator.type = 'triangle';
+
+    gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+
+    oscillator.start();
+    oscillator.stop(this.audioContext.currentTime + 0.3);
+  }
+
+  playTyping(volume: number = 0.1) {
+    if (!this.enabled || !this.audioContext) return;
+
+    // Soft click sound for typing
+    const oscillator = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+
+    oscillator.frequency.setValueAtTime(1000 + Math.random() * 500, this.audioContext.currentTime);
+    oscillator.type = 'square';
+
+    gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.05);
+
+    oscillator.start();
+    oscillator.stop(this.audioContext.currentTime + 0.05);
+  }
+
+  playChatOpen(volume: number = 0.4) {
+    if (!this.enabled || !this.audioContext) return;
+
+    // Pleasant ascending tone for opening chat
+    const oscillator = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+
+    oscillator.frequency.setValueAtTime(300, this.audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(500, this.audioContext.currentTime + 0.2);
+    oscillator.type = 'sine';
+
+    gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+
+    oscillator.start();
+    oscillator.stop(this.audioContext.currentTime + 0.3);
+  }
 }
 
 // Global sound instance

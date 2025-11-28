@@ -52,11 +52,14 @@ const ChatModal: React.FC = () => {
   };
 
   const suggestedQuestions = [
-    "What's Jae's background?",
-    "What technologies does Jae work with?",
-    "Tell me about Jae's projects",
-    "What are Jae's strengths?",
-    "How can I contact Jae?",
+    "What's your most impressive research achievement?",
+    "How do you approach healthcare AI challenges?",
+    "What drew you to computational oncology?",
+    "How has your work impacted real patients?",
+    "What's your vision for AI in healthcare?",
+    "What makes Cornell unique for your research?",
+    "How do you balance theory and practice?",
+    "What's next in your research journey?",
   ];
 
   const handleSuggestedQuestion = (question: string) => {
@@ -90,7 +93,7 @@ const ChatModal: React.FC = () => {
             }}
             exit={{ opacity: 0, scale: 0.8, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-6 w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 z-50 flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-96 max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 flex flex-col overflow-hidden"
             style={{ maxHeight: isMinimized ? '60px' : '600px' }}
           >
             {/* Header */}

@@ -1,7 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import { RAGPortfolio } from '../components/RAGPortfolio';
 
 export function PortfolioPage() {
-  return <RAGPortfolio />;
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate('/');
+  };
+
+  const handleExit = () => {
+    navigate('/');
+  };
+
+  return <RAGPortfolio onBack={handleBack} onExit={handleExit} />;
 }
 
 

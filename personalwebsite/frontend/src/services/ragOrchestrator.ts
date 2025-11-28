@@ -130,25 +130,79 @@ Always cite specific projects, technologies, or experiences when relevant.`
   // Get suggestions for follow-up questions
   getSuggestions(query: string): string[] {
     const searchResults = this.vectorSearch.hybridSearch(query, 3);
+    const queryLower = query.toLowerCase();
 
-    const suggestions = [
-      "Tell me more about your machine learning projects",
-      "What technologies do you specialize in?",
-      "Can you describe your research experience?",
-      "What are your most challenging projects?",
-      "How do you approach full-stack development?"
+    const baseSuggestions = [
+      "What inspired you to work in healthcare AI?",
+      "How do you approach complex data science problems?",
+      "What's your most challenging project to date?",
+      "How has your research impacted real patients?",
+      "What emerging technologies excite you most?",
+      "How do you collaborate with medical professionals?"
     ];
 
-    // Customize suggestions based on retrieved content
+    // Context-aware suggestions based on query content
+    const contextualSuggestions = [];
+
+    if (queryLower.includes('project') || queryLower.includes('research') || queryLower.includes('work')) {
+      contextualSuggestions.push(
+        "Can you walk me through your MSKCC oncology research?",
+        "What was your most technically challenging project?",
+        "How do you validate healthcare AI models?",
+        "What's the clinical impact of your biosensor work?"
+      );
+    }
+
+    if (queryLower.includes('skill') || queryLower.includes('tech') || queryLower.includes('technology')) {
+      contextualSuggestions.push(
+        "How do you choose between TensorFlow and PyTorch?",
+        "What's your approach to clinical NLP challenges?",
+        "How do you handle multi-omics data integration?",
+        "What tools do you use for biomedical signal processing?"
+      );
+    }
+
+    if (queryLower.includes('education') || queryLower.includes('cornell') || queryLower.includes('university')) {
+      contextualSuggestions.push(
+        "What unique aspects of Cornell shaped your research?",
+        "How does your CS background help with biomedical problems?",
+        "What courses were most valuable for your healthcare AI work?",
+        "How did your Cornell experience prepare you for MSKCC research?"
+      );
+    }
+
+    if (queryLower.includes('ai') || queryLower.includes('ml') || queryLower.includes('machine learning')) {
+      contextualSuggestions.push(
+        "How do you ensure AI models are safe for healthcare?",
+        "What's your approach to model interpretability in medicine?",
+        "How do you handle bias in healthcare AI systems?",
+        "What metrics matter most in clinical ML models?"
+      );
+    }
+
+    if (queryLower.includes('future') || queryLower.includes('career') || queryLower.includes('phd')) {
+      contextualSuggestions.push(
+        "What PhD programs are you considering?",
+        "How do you see healthcare AI evolving?",
+        "What research directions excite you most?",
+        "How can we improve AI adoption in healthcare?"
+      );
+    }
+
+    // Content-based suggestions from search results
     if (searchResults.some(r => r.document.metadata.type === 'project')) {
-      suggestions.unshift("Tell me about your recent projects");
+      contextualSuggestions.unshift("Can you dive deeper into your project methodology?");
     }
 
     if (searchResults.some(r => r.document.metadata.category === 'ai-ml')) {
-      suggestions.unshift("What AI/ML work have you done?");
+      contextualSuggestions.unshift("What were the biggest technical challenges in your AI work?");
     }
 
-    return suggestions.slice(0, 4);
+    // Combine and deduplicate suggestions
+    const allSuggestions = [...contextualSuggestions, ...baseSuggestions];
+    const uniqueSuggestions = Array.from(new Set(allSuggestions));
+
+    return uniqueSuggestions.slice(0, 6);
   }
 }
 

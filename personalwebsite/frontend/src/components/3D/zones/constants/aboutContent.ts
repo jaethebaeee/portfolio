@@ -1,19 +1,19 @@
 export const aboutContent = {
   title: "About Jae Kim",
   subtitle: "AI Engineer • Healthcare ML",
-  content: `Hi! I'm Jae Kim, an AI Engineer building healthcare ML solutions. Cornell BA/MS '25 with 2 publications, specializing in clinical AI and NLP.
+  content: `Hi! I'm Jae Kim, an AI Engineer at MSKCC building healthcare ML solutions. Research experience at Cornell Sci-Fi Lab, AIR Lab, and materials science research with Prof. Tasan.
 
-I create ML systems that actually improve patient care and reduce healthcare costs.`,
+Cornell BA/MS '25 with 2 publications, specializing in clinical AI and NLP.`,
   highlights: [
     {
-      icon: "🎯",
-      title: "Impact Focused",
-      description: "25%+ better patient outcomes through AI"
+      icon: "🏥",
+      title: "MSKCC AI Engineer",
+      description: "Memorial Sloan Kettering Cancer Center"
     },
     {
-      icon: "🎓",
-      title: "Published Researcher",
-      description: "2 peer-reviewed papers, Cornell BA/MS '25"
+      icon: "🚀",
+      title: "Research Labs",
+      description: "Cornell Sci-Fi Lab, AIR Lab, MIT C-CEM"
     },
     {
       icon: "🧠",
